@@ -8,9 +8,9 @@
 | Ctrl+Shift+Enter    | Complete statment                               | 代码补全后，自动在代码末尾添加分号结束符                     |
 | Ctrl+P              | Parameter info                                  | 某个方法后，显示参数                                         |
 | Ctrl+Q              | Quick doucumentation                            | 显示某个类或者方法的API说明文档                              |
-|                     | Generate Code                                   | 自动生成某个类的Getter等                                     |
+| Alt+Insert          | Generate Code                                   | 自动生成某个类的Getter等                                     |
 | Ctrl+O              | Override method                                 | 展示该类中所有覆盖或者实现的方法列表                         |
-|                     | Surroud With                                    | 自动生成具有环绕性质的代码                                   |
+| Ctrl+Alt+T          | Surroud With                                    | 自动生成具有环绕性质的代码                                   |
 | Ctrl+/              | Comment with line                               | 注释                                                         |
 | Ctrl+Shift+/        | Comment with block                              | 对代码块，添加或删除注释                                     |
 | Ctrl+W              | Select successively increasing code blocks      | 选中当前光标所在的代码块，多次触发                           |
@@ -18,14 +18,14 @@
 | Ctl+Shift+]/[       | Select till code block end/start                | 从当前光标开始，一直选择到当前光标所在代码段起始或者结束位置 |
 | Alt+Q               | Context info                                    | 展示包含当前光标所在代码的父节点信息                         |
 | Alt+Enter           | Show intention actions and quick-fixs           | 展示当前光标所在代码，可以变化的扩展操作                     |
-|                     | Reformat code                                   | 格式化代码                                                   |
-|                     | Optimize imports                                | 去除没有实际用到的包                                         |
+| Ctl+Alt+L           | Reformat code                                   | 格式化代码                                                   |
+| Ctrl+Alt+O          | Optimize imports                                | 去除没有实际用到的包                                         |
 | Ctl+ALt+I           | Auto-indent line                                | 按照缩进的设定，自动缩进所选择的代码段                       |
-|                     | Paste from recent buffers                       | 从之前的剪切或拷贝的代码历史记录中，选择内容                 |
-|                     | Duplicate current line or select block          | 复制当前选中的代码行                                         |
-|                     | Delete line at caret                            | 删除当前光标所在的代码行                                     |
-|                     | Smart line join                                 | 把下一行的代码续接到当前的代码行                             |
-|                     | Smart line split                                | 当前代码行与下一行代码之间插入一个空行，光标不变             |
+| Ctl+Shift+V         | Paste from recent buffers                       | 从之前的剪切或拷贝的代码历史记录中，选择内容                 |
+| Ctl+D               | Duplicate current line or select block          | 复制当前选中的代码行                                         |
+| Ctl+Y               | Delete line at caret                            | 删除当前光标所在的代码行                                     |
+| Ctl+Shift+J         | Smart line join                                 | 把下一行的代码续接到当前的代码行                             |
+| Ctl+Enter           | Smart line split                                | 当前代码行与下一行代码之间插入一个空行，光标不变             |
 | Shift+Enter         | Start new line                                  | 当前代码行与下一行代码之间插入一个空行，光标在下一行         |
 | Ctrl+Shift+U        | Toggle case for word at caret or selected block | 所选择的内容进行大小写转换                                   |
 | Ctrl+Delete         | Delete to word end                              | 删除从当前光标所在位置，直到这个单词的结尾的内容             |
@@ -37,14 +37,14 @@
 
 ## 查找或替换
 
-| 快捷键   | 英文说明        | 中文说明                               |
-| -------- | --------------- | -------------------------------------- |
-| Ctl+F    | Find            | 在当前标签页中进行查找，支持正则表达式 |
-| F3       | Find next       | 如果找到了多个查找结果，跳至下一个结果 |
-| Shift+F3 | Find previous   | F3的方向操作                           |
-|          | Replace         | 替换                                   |
-|          | Find in path    | 通过路径查找                           |
-|          | Replace in path | 通过路径替换                           |
+| 快捷键       | 英文说明        | 中文说明                               |
+| ------------ | --------------- | -------------------------------------- |
+| Ctl+F        | Find            | 在当前标签页中进行查找，支持正则表达式 |
+| F3           | Find next       | 如果找到了多个查找结果，跳至下一个结果 |
+| Shift+F3     | Find previous   | F3的方向操作                           |
+| Ctrl+R       | Replace         | 替换                                   |
+| Ctrl+Shift+F | Find in path    | 通过路径查找                           |
+| Ctrl+Shift+R | Replace in path | 通过路径替换                           |
 
 ## 查看使用情况
 
@@ -60,9 +60,9 @@
 | 快捷键        | 英文说明                                    | 中文说明                                                   |
 | ------------- | ------------------------------------------- | ---------------------------------------------------------- |
 | Ctl+F9        | Make Project(Compile modifed and dependecy) | 编译项目（如果之前编译过，只会编译那些修改的类或依赖的包） |
-|               | Compile selected file，package or module    | 编译选中的范围                                             |
+| Ctl+Shift+F9  | Compile selected file，package or module    | 编译选中的范围                                             |
 | Atl+Shift+F10 | Select configuration and run                | 会打开一个已经配置的运行列表，选择一个运行                 |
-|               | Select configuration and debug              |                                                            |
+| Alt+Shift+F9  | Select configuration and debug              |                                                            |
 | **Shift+F10** | Run                                         | 立即运行当前配置的运行实例                                 |
 | Ctl+Shift+F10 | Run context configuration from editor       | 按照编辑器绑定的文件类型，运行相关的程序                   |
 
@@ -72,12 +72,12 @@
 | ------------- | ------------------- | ---------------------------------------------------------- |
 | F8            | Step over           | 跳到当前代码下一行                                         |
 | F7            | Step into           | 跳入调用的方法内部代码                                     |
-|               | Smart Step into     | 会打开一个面板，选择具体要跳入的类                         |
+| Shift+F7      | Smart Step into     | 会打开一个面板，选择具体要跳入的类                         |
 | Shift+F8      | Strp out            | 跳出当前的类，到上一级                                     |
 | Alt+F9        | Run to cursor       | 让代码运行到当前光标所在                                   |
 | Alt+F8        | Evaluate expression | 打开一个表达式面板，然后进行进一步的计算                   |
 | F9            | Resume program      | 结束当前断点的本轮调试，如果有下一个断点会跳到下一个断点中 |
-|               | Toggle breakpoint   | 在当前光标处，添加或者删除断点                             |
+| Ctrl+F8       | Toggle breakpoint   | 在当前光标处，添加或者删除断点                             |
 | Ctrl+Shift+F8 | View breakpoints    | 打开当前断点的面板，可以进行条件过滤                       |
 
 ## 导航
