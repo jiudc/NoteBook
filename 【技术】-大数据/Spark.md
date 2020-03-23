@@ -297,3 +297,99 @@ checkpoint写流程：Initialized->marked for checkpointiong->checkpointing in p
 - 适当的使用序化方案以及压缩方案；、
 - 善于利用集群监控系统，将集群的运行状况维持在一个合理的、平稳的状态；
 - 善于解决重点矛盾，多观察Stage中的Task，查看最耗时的Task，查找原因并改善
+
+## Spark Streaming
+
+### Spark Streaming定义
+
+​	用于流式数据处理。支持的输入源很多，例如：Kafka、Flume、Twitter、ZeroMQ和简单的CP套接字等等。
+
+使用离散化流作为抽象表示，DStream。
+
+### Spark Streeam特点
+
+1. 易用
+2. 容错
+3. 易整合到Spark体系
+
+### Spark Stream架构
+
+#### 背压机制
+
+​	Spark1.5以前版本，限制Receiver的数据接收速率，可通过惊天配置参数"spark.streaming.reveiver.maxRate"来是实现，可能回造成资源利用率下降。
+
+​	Saprk1.5之后使用背压机制，可动态调节数据接收速率。在Drvier的ReceiverRateController模块实现。
+
+​	通过属性"spark.streaming.backpresure.enabled"来空盒子是否开启，默认为false，不开启。
+
+### Dstream入门
+
+#### scala示例
+
+```scala
+val sparkConf:SparkConf = new SparkConf().setMaster("local[*]"").setAppName("WordCount")
+val ssc = new StreamingContex(sparkConf, Seconds(3))
+val lineDStream : ReveiverInputDStream[String] = ssc.socketTextStream("hostname",port)
+val wordDStream : DStream[String] = lineDStream.flatMap(_.split(" "))
+wordDStream.map((_,1)).reduceByKey(_+_).print
+ssc.start()
+ssc.awaitTermination()
+```
+
+#### WordCount数据流解析
+
+Reciver
+
+Executor
+
+### Dstream创建
+
+#### Kafka数据源
+
+1. 用法及说明：两个核心类KafkaUtils、KafkaCluster
+
+2. 代码示例
+
+   ```scala
+   //读取上一次所消费数据位置
+   def getOffset(kafkaCluster:KafkaCluster,group:String,topic:String)={
+       //获取分区信息
+       val partitions:[Either[Err,Set[TopicAndPartition]] = KafkaCluster.getPartisions(Set(topic))
+       //判断是否有分区信息
+       if(partitions.isRight){
+       	//分区信息
+           val to = partions.right.get
+           val 
+       }
+       KafkaCluster.getConsumerOffsets(group,)
+   }
+   def main(args:Array[String]):Unit={
+       val sparkConf:SparkConf = new SparkConf().setMaster("local[*]").setAppName("KafkaStreaming")
+       cal ssc = new StreamingContext(sparkConf, Second(3))
+       //卡夫卡参数定义
+       var brokers = ""
+       var topic = ""
+       var group = ""
+       var deserialization = ""
+       //卡夫卡参数
+       val kafakaPara = Map(ConsumerConfig.BOOTRAT_->brokers,Group,Key,Value)
+       //获取KafkaCluster
+       val kafkaCluster = new KafkaCluster(kafkaPara)
+       //读取Kafka数据创建DStream
+       KafkaUtils.createDirectStream(ssc,kafkaPara,)
+       }
+   ```
+
+### Dstream转换
+
+#### 无状态转换
+
+Transform
+
+#### 有状态装换
+
+1. UpdateStateByKey
+2. Window Operations
+
+### 自定义数据源
+
