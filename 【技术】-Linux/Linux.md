@@ -27,27 +27,157 @@
 
 ## 基础命令
 
-区分大小写
+### 关机重启
 
-- ls -F,区分文件夹文件,-R递归,-a全部，-l显示长列表,ls -alF
-- ls -l my_script，过滤匹配输出列表
-- ls -l –time=atime，才可以显示文件的访问时间，否则默认显示修改时间
-- ls -d只列出目录
-- ls -i查看文件或者目录的inode编号
+- shutdown
+	- shutdown -h now：立即关机
+	- shutdown -h 1:一分钟后关机
+	- shutdow -r now：立即重启
+- halt：直接使用，等于关机
+- reboot：重启系统
+- syn：把内存的数据同步到磁盘
+- logout：注销
+
+### 用户管理
+
+- 添加用户：useradd [选项] 用户（创建默认组；创建home目录）
+	- useradd -d /home/trigger/ gemsuser
+- 指定或修改密码：passwd gemsuser
+- 删除用户：userdel 用户名
+	- 保留home目录：userdel 用户
+	- 不保留home目录：userdel -r 用户
+- 查询用户信息：id 用户名
+- 切换用户：su - 
+- 查询用户：whoami
+
+### 用户组
+
+- 组件组：groupadd 组名
+- 删除组：groupdel 组名
+- 增加用户指定组：useradd - g 用户组 用户名
+- 修改用户组：usermod -g 用户组 用户名
+
+### 用户和组的相关文件
+
+- /etc/passwd :用户配置文件（用户信息）
+- /etc/group：组配置文件（组信息），组名 口令 组ID 组内用户列表
+- /etc/shadow：口令配置文件，密码等
+
+## 实用指令
+
+### 指定运行界别
+
+- 0：关机
+- 1：单用户（找回丢失密码）
+- 2：多用户（无网络服务）
+- 3：多用户（有网络服务）
+- 4：保留
+- 5：图形界面
+- 6：重启
+
+​	系统的运行级别配置文件/etc/inittab
+
+切换到运行级别的指令：init [0123456]
+
+### 如何找回root密码
+
+- 进入单用户模式，修改密码
+- 开机->引导时输入回车键->e->选择第二行（编辑内核）再输入e->在这行最后输入1->回车键->b，进入单用户模式
+
+### 帮助指令
+
+man [命令或者配置文件] 指令
+
+help 命令
+
+### 文件目录类
+
+- pwd
+- ls：
+	-  -F,区分文件夹文件,-R递归,-a全部，-l显示长列表,ls -alF
+	- -l my_script，过滤匹配输出列表
+	-  -l –time=atime，才可以显示文件的访问时间，否则默认显示修改时间
+	- -d只列出目录
+	- -i查看文件或者目录的inode编号
 - mkdir -p,递归目录创建
+- rmdir：删除空目录
 - 创建文件：touch filename,也可用于改变修改日期，若想改变访问时间，可加上参数-a
 - 复制：cp src dst，cp -i覆盖前会提示
-- 递归复制：cp -R
-- 链接文件：ln -s src dst，软链接
-- ln src dst，硬链接，完全一样
-- file能探测文件的内部，知晓文件的类型
-- cat file，查看文件，-n行号，-b行数（不包括空行）
+- 递归复制：cp -r
+	- \cp 强制覆盖，不提示覆盖
+- rm
+	- -r：递归真个文件夹
+	- -f：不提示
+- mv
+- cat file，查看文件，-n行号，-b行数（不包括空行
+	- cat -n /etc/profile |more
 - cat -T不让制表符出现，一旦开始无法控制后面操作
 - more显示文本文件，会在显示每页数据后停下来
-- less，more的升级版
+	- 空格键：向下翻一页
+	- Enter：一行
+	- q：退出
+	- Ctrl+F：向下滚动一屏
+	- Ctrl+B：向上
+	- =：输出当前的行号
+	- ：f 输出文件名和当前的行号
+	- ！ 调用shell，并执行命令
+- less，more的升级版（查看大文件）
+	- /pattern：匹配，n下一个，N前一个
+	- ？pattern
+	- CTRL+f\b\d\u
 - 查看部分文件tail,默认情况显示文件的末尾10行
 - tail -n 2 log_file显示末尾2行，-f参数允许其他进程使用该文件时查看文件类容，hi保持活动状态，并不断显示添加到文件的内容。实时监测系统日志
 - head，显示开头，head -5 log_file
+- 重定向和追加
+	- \> 覆盖
+	- \>\>追加
+- 链接文件：ln -s src dst，软链接
+	- 删除软连接时==不要带斜杠==
+- ln src dst，硬链接，完全一样
+- history
+	- history 10
+	- !178
+
+### 时间日期类
+
+- date
+	- date
+	- date “+%Y %m %d %H %M %S”
+	- 设置日期：data -s “2020-2-2 22:22:22”
+- cal：显示日历时间
+	- cal
+	- cal 2020
+
+### 搜索查找类
+
+- find
+	- find /  -name xxname
+	- find / -user gemsuser
+	- find / -size +20M/-10K/30G
+- locate：在第一次运行前，必须使用updatedb指令创建locate数据库，可用于快速定位
+	- updatedb
+	- locate xxxx
+- grep
+	- -n：显示匹配行及行号
+	- -i：忽略大小写
+
+### 压缩和解压缩
+
+- gzip：压缩后，不保留原文件。gzip xx
+- gunzip
+- zip：zip [选项] xxx.zip 目录
+	- -r：递归压缩
+- unzip
+	- -d：解压目的目录
+- tar：tzr -zvbf xx.tar.gz file1 file2
+	- -c：产生tar打包文件
+	- -v：显示信息
+	- -f：指定文件名
+	- -z：压缩
+	- -x：解压
+	- tar -xzvf xx.tar.gz -C /opt/
+
+- file能探测文件的内部，知晓文件的类型
 - 查看进程ps，默认情况下ps显示运行在当前控制台下的属于当前用户的进程
 	- n -A，显示所有进程
 	- n -N，显示与指定参数不符的所有进程
@@ -128,6 +258,121 @@
 - jobs：显示当前运行在后台的作业 jobs -l还可显示命令的PID
 - 后台运行：(tar *)&
 - 协程：在后台生成一个shell，并在这个shell中执行命令。coproc My_job { sleep 10; }
+
+## 组管理
+
+### 基本介绍
+
+​	文件：所有者、所在组、其他组
+
+- 改变文件所有者：chown 用户名 文件名
+- 组的创建：groupadd 组名
+- 修改文件所在组：chgrp 组名 文件名
+- 其他组：排除所有者和所在组
+- 修改用户所在组：usermod -g 组名 用户名
+- 修改用户登录目录：usermod -d 目录名 用户名 改变该用户登录的初始目录
+
+### 权限基本介绍
+
+- rwx[421]
+
+### 权限管理
+
+- chmod：chmod u=rwx,g=rx,o=x 文件名
+	- u、g、o、a（所有）
+	- chmod 751 文件名
+	- -R 递归修改
+- chown
+	- chown -R gemsuser  /
+	- chown newowner:newgroup file
+- chgrp
+
+## 定时任务调度
+
+- crond任务调度
+	- -e：编辑
+		- 第几分钟 0~59
+		- 第几小时 0~23
+		- 第几天 1~31
+		- 第几月 1~12
+		- 星期几 0~7（0和7都代表星期日）
+		- *任何时间
+		- ,不连续时间
+		- -范围
+		- */n,每隔多久
+	- -l：显示
+	- -r：删除
+	- service crond restart：重启任务调度
+
+## 磁盘分区挂载
+
+#### Linux分区
+
+- mbr
+- gtp
+
+#### 硬盘说明
+
+- IDE：hdx hda3-第一个IDE银盘上的第三个分区
+- SCSI：sdx
+
+lsblk -f：查看系统分区和挂载的磁盘
+
+#### 挂载经典案例
+
+1. fdisk /dev/sdb
+2. mkfs - t ext4 /dev/sdb1
+3. mount /dev/sdb1 /home/newdisk（临时挂载）
+4. 永久挂载：vi  /etc/fstab
+	mount -a及时生效
+
+#### 磁盘情况查询
+
+- df -hl
+- du -h /目录
+	- -a含文件
+	- --max-depth=1子目录深度
+		- 统计文件个数 ls -l /home|grep “^-”|wc -l
+		- 统计目录个数 ls -l /home|grep “^d”|wc -l
+		- 统计文件个数包括子目录ls -lR /home|grep “^-”|wc -l
+		- 以树状图 tree
+
+## 网络配置
+
+- ifconfig
+- ping
+- 指定固定ip：vi /etc/sysconfig/netwok-scripts/ifconfig-eth0,static,dns,gateway,onboot=yes
+- server network restart
+
+#### 修改主机名
+
+- hostname
+- vim /etc/sysconfig/network:HOSTNAME:yourname
+- vim /etc/hosts
+
+## 进程管理
+
+#### 显示系统执行的进程
+
+- ps
+	- -a：显示当前终端所有的进程
+	- -u：以用户的格式显示进程信息
+	- -x：显示后台进程运行的参数
+	- -ef：查看父进程
+
+#### 终止进程
+
+- kill
+	- -9
+- killall
+	- killall gedit
+- pstree
+	- -p：显示进程的PID
+	- -u：显示所属的用户
+
+## 服务管理
+
+
 
 ## 内建命令
 
@@ -369,8 +614,8 @@
 - gg 跳到文件顶部
 - G 跳到文件尾部
 - 数字+G 跳到某一行
-- dd删除整行/剪切
-- yy 赋值当前行
+- dd删除整行/剪切，6dd
+- yy 赋值当前行，5yy
 	- p 粘贴
 - u 撤销当前操作
 - U 取消对当前行的所有操作

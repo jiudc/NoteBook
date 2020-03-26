@@ -30,9 +30,20 @@
 
 ## 注入
 
+### 手工装配
+
+list、map、property、util:list、p:、c:
+
+### 自动装配
+
+1. byType：xml中autowire=“byName”
+2. byNames：xml中autowire=“byTpe”
+
 1. SET方法注入：Property
 2. 构造方法注入：Constructor-org
-3.  接口注入
+3. 接口注入
+
+![CDATA[]]-字面包含特殊字符可以使用
 
 ## Spring 核心思想
 
