@@ -81,3 +81,15 @@ if (条件表达式) {
 ### While
 
 - whle没有返回值
+
+## 构造器
+
+​	构造器用来完成对象的初始化，而不是创建。包括==主构造器==和==辅助构造器==。辅助构造器可以有多个，编译器通过参数的个数来区分。
+
+```scala
+class Person(inAge:INt,inName:String){//主构造器
+ 	var age：Int=inAge
+    var name：String=inName
+}
+```
+
