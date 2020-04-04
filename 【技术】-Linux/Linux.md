@@ -372,7 +372,58 @@ lsblk -f：查看系统分区和挂载的磁盘
 
 ## 服务管理
 
+### 管理指令
 
+- service
+	- service sshd status
+- /etc/init.d：列出系统那些服务
+- vi /etc/inittab：查看或者修改运行级别
+- chkconfig：可以给每个服务的各个运行级别的自启动
+	- chkconfig --list|grep sshd
+	- chkconfig --level 5 sshd off
+
+### 动态监控进程
+
+- top
+	- -d:top -d 10刷新时间
+	- -i:
+	- -p:
+	- u：查看特定用户
+	- k：进程号，杀进程
+	- P：cpu排序
+	- M：按内存排序
+	- N：pid排序
+
+### 监看网络情况
+
+- netstat
+	- -an：按一定排序排列输出
+	- -p：显示那个进程在调用
+	- netstat -anp|more
+	- netstat -tunlp
+
+## RPM和YUM
+
+### RPM
+
+readhat package manager
+
+- rpm -qa|grep xx
+- rpm -q foxmail
+- rpm -qi foxmail
+- rpm -ql foxmail：查看安装位置
+- rpm -qf /etc/passwd：查询文件属于哪个包
+- rpm -e RPM包名称：卸载
+- rpm -e -nodeps：强制删除
+- rpm -ivh foxmail
+	- -i：install
+	- -v：verbose提示
+	- -h：hash进度条
+
+### yum
+
+- yum list|grep xx
+- yum install xx
 
 ## 内建命令
 
