@@ -274,19 +274,121 @@ checkpoint写流程：Initialized->marked for checkpointiong->checkpointing in p
 
 ### 开发调优
 
+- 设置并行度
+
+  - 在会产生shuffle的操作函数内设置并行度参数
+  - 读取文件增加并行度参数
+
+- DAG设计
+
 - 避免创建重复的RDD
+
 - 尽可能复用同一个RDD
+
 - 对多次使用的RDD进行持久化：调用cache()或persist()，建议选择顺序为MEMORY_ONLY>MEMORY_ONLY_SER>MEMORY_AND_DISK_SER
+
+  - rdd.persist(StorageLevel.MEMORY_ONLY)
+  - 可能出现OOM
+
 - 尽量避免使用shuffle算子
-- 使用map-site预聚合的shuffle操作：尽量使用map-side预聚合算子（如reduceByKey代替aggregateByKey），map-side预聚合使
+
+  - 重分区算子
+    - repartition
+    - coalesce
+  - ByKey算子
+    - groupByKey
+    - reduceByKey
+    - aggregateByKey
+    - combineByKey
+    - sortByKey
+    - sortBy
+  - Join算子
+    - cogroup
+    - join
+    - leftOuterJoin
+    - intersection
+    - subtract
+    - subtractByKey
+  - 去重算子
+    - distinct
+  - 举例
+    - 使用Broadcast与map代替join操作，针对数据集在到1、2G大小
+
+- 使用map-site预聚合的shuffle操作：尽量使用map-side预聚合算子（如reduceByKey或aggregateByKey代替groupByKey），map-side预聚合使
+
 - 使用高性能的算子
-	- 使用aggregateByKey/reduceByKey代替groupByKey
-	- 使用mapPartitions代替map
-	- 使用foreachPartitions代替foreach
-	- 使用filter之后进行coalesce
-	- 使用repartitionAndSortWithinPartitions代替repartition和sort
+  - 使用aggregateByKey/reduceByKey代替groupByKey
+  - 使用mapPartitions代替map
+    - 一次函数调用处理一个partition所有数据，可能OOM
+  - 使用foreachPartitions代替foreach
+  - 使用filter之后进行coalesce
+    - 增加分区：coalesce(number,true)和reparation(num)
+    - 较少分区：coalesce(number,false)
+  - 使用repartitionAndSortWithinPartitions代替repartition和sort
+
 - 广播大变量：可保证每个executor内存中只保留一份变量，否则每个task都有
+
+  - 使用set/map(O(1))代替数组，Iterator（O(n)）
+
 - 使用Kryo优化序列化性能
+
+  - ```scala
+    // 创建SparkConf对象。
+    val conf = new SparkConf().setMaster(...).setAppName(...)
+    // 设置序列化器为KryoSerializer。
+    conf.set("spark.serializer", "org.apache.spark.serializer.KryoSerializer")
+    // 注册要序列化的自定义类型。
+    conf.registerKryoClasses(Array(classOf[MyClass1], classOf[MyClass2]))
+    ```
+
+### 集群资源调优
+
+- Driver
+- Executor
+  - task执行代码，20%
+  - 通过shuffle拉去上一个stage的task输出，20%
+  - 持久化，60%
+- 参数
+  - num-executors:spark.executor.instance(50~100)
+  - execute-memory:spark.executor.memory
+  - executor-cores:spark.executor.cores(5)
+  - driver-memory:dpark.driver.memory
+  - spark.default.parallelism(500~1000)
+  - spark.storage.memoryFraction:0.6,持久化数据内存占比。频繁gc可降低该值
+  - spark.shuffle.memoryFraction:0.2，shuffle聚合操作的内存占比
+- 配置内存
+  - spark.driver.extraJavaOptions和spark.executor.extraJavaOptions选项中增加参数：
+    - "-verbose:gc -XX:+PrintGCDetails -XX:+PrintGCTimeStamps"
+    - 若频繁出现full gc则需要优化
+      - 优化GC，调整老年代和新生代的大小和比例。在客户端的conf/spark-
+        default.conf配置文件中，在spark.driver.extraJavaOptions和
+        spark.executor.extraJavaOptions配置项中添加参数：-XX:NewRatio。如，" -
+        XX:NewRatio=2"，则新生代占整个堆空间的1/3，老年代占2/3。
+      - 开发Spark应用程序时，优化RDD的数据结构。
+        – 使用原始类型数组替代集合类，如可使用fastutil库。
+        – 避免嵌套结构。
+        – Key尽量不要使用String。
+      -  开发Spark应用程序时，建议序列化RDD。
+        RDD做cache时默认是不序列化数据的，可以通过设置存储级别来序列化RDD减小
+        内存。例如：
+        testRDD.persist(StorageLevel.MEMORY_ONLY_SER)
+- Yarn平台动态资源调度
+  - 配置External shuffle service
+  - spark.dynamicAllocation.enabled修改为ture
+  - 
+
+### 数据倾斜
+
+1. 个别task执行极慢
+2. 正常的作业，突然报出OOM
+
+- 采样拆分
+  - 采样将数据倾斜的键值的数据生成新的RDD
+
+### Shuffle优化
+
+1. shuffle wirte:一个stage结束计算后，为下一个stage可以执行shuffle类的算子，而将每个task处理的数据按key进行分类。数据写入内存缓存中，当内存缓冲满之后溢出写到磁盘文件中。每个task写入磁盘文件数由下一个任务的task决定。
+2. shuffle read:将上一个stage中计算结果中的所有相同key，从各个节点通过网络拉取到自己所在的节点。一边拉取一边聚合。
 
 ### 建议
 
