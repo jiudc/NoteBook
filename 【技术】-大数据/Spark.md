@@ -101,6 +101,8 @@ Resilient Distributed DataSet，弹性分布式数据集。代表一个不可变
 - Executor：某个Application运行在Worker节点上的一个进程，该进行负责运行某些task，并且负责将数据存在内存或者磁盘上。在Spark on Yarn模式下，其进程名称为CoarseGrainedExecutor Backend，有且仅有一个executor对象，它负责将Task包装成taskRunner，并从线程池中抽取一个空闲线程运行Task，并行运行Task的数据就取决于分配给它的CPU个数
 - Worker：集群中可以运行Application代码的节点。Standalone模式中指通过slave文件配置的worker节点，在Spark on Yarn模式中指的是NodeManager节点
 - Task：在Executor进程中执行任务的工作单元，多个Task组成一个Stage
+  - ShuffleMapTask：
+  - ResultTask：
 - Stage：每个Job会被拆分为很多组Task，作为一个TaskSet，名称为Stage
 - DAGSchedule：根据job构建基于Stage的DAG，并提交Stage给TaskScheduler，其划分Stage的依赖是RDD之间的依赖关系
 - TaskScheduler：将TaskSet提交给Worker（集群）运行，每个Executor运行什么Task就是在此处分配的
@@ -494,4 +496,20 @@ Transform
 2. Window Operations
 
 ### 自定义数据源
+
+## 模块设计
+
+### Spark Core
+
+​	SparkContext的初始化、部署模式、部署体系、任务提交与执行、计算引擎
+
+### Spark SQL
+
+​	提供SQL处理能力，便于熟悉关系型数据库操作的工程师进行交互查询
+
+### Spark Streaming
+
+​	提供流式计算处理能力
+
+
 
