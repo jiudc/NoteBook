@@ -503,6 +503,13 @@ Transform
 
 ​	SparkContext的初始化、部署模式、部署体系、任务提交与执行、计算引擎
 
+- SparkContext：正式提交Application需要初始化SparkContext
+  - DAGScheduler负责创建Job。
+  - TaskScheduler负责资源的申请、任务的提交及集群对任务的调度
+- 存储体系：优先使用各节点的内存作为存储
+- 计算引擎：有DAGScheduler、RDD及具体节点上的Executor负责执行
+- 部署模式   
+
 ### Spark SQL
 
 ​	提供SQL处理能力，便于熟悉关系型数据库操作的工程师进行交互查询
@@ -511,5 +518,24 @@ Transform
 
 ​	提供流式计算处理能力
 
+## SparkContext初始化
 
+### SparkConf
+
+​	ConcurrentHashMap，"spark."
+
+1. 创建Spark执行环境SparkEnv
+2. 创建RDD清理器metedataClearner
+3. 创建并初始化Spark UI
+4. Hadoop相关配置及Executor环境变量的设置
+5. 创建任务调度TaskScheduler
+6. 创建和启动DAGScheduler
+7. TaskScheduler启动
+8. 初始化块管理器BlockManager
+9. 启动测量系统MetricsSystem
+10. 创建和启动Executor分配管理器ExecutorAllocationManager
+11. ContextCleaner的创建和启动
+12. Spark环境更新
+13. 创建DAGSchedulerSource和BlockManagerSource
+14. 将SparkContext编辑为激活
 
