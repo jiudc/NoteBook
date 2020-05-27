@@ -116,11 +116,9 @@
 | Ctrl + [0-9]               | Go to numbered bookmark                   | 跳转到之前定义的快捷键书签                                   |
 | Shift + F11                | Show bookmarks                            | 打开书签列表。（常用）                                       |
 
+## 自定义注释
 
-
-
-
-
+![image-20200527163401715](https://raw.githubusercontent.com/jiudc/pictures/master/image-20200527163401715.png)
 
  
 
