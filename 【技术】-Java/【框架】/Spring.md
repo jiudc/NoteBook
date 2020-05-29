@@ -91,5 +91,95 @@ list、map、property、util:list、p:、c:
 - @ComponentScan(basePackages = “Libname”);
 - @ComponentScan(basePackages = {“Nm1”,”Nm2”});
 - @ComponentScan(basePackageClases ={CDplayer.class,DVDPlayer.class});
-- @Autowired();
-- @Autowired(required=false);若Spring没有找到合适的bean不会报异常，使得该bean处于未装配状态
+- @Autowired;
+  - 可用于构造器
+  - 属性的Setter方法
+  - 类的任何方法，Spring都会尝试满足方法参数上所申明的依赖，若没有匹配的bean，那么在应用上下文创建的时候回抛出异常。
+    - @Autowired(required=false);若Spring没有找到合适的bean不会报异常，使得该bean处于未装配状态
+- @Bean:
+  - 告诉Spring这个方法将会返回一个对象，该对象要注册为Spring应用上下文的bean
+
+## XML装配
+
+### 构造器注入
+
+- <constructor-arg>
+
+  - ```xml
+    <bean id="cdplayer1" class="com.ldc.chapter02.CDPlayer">
+        <constructor-arg ref="castle"></constructor-arg>
+    </bean>
+    ```
+
+- c命名空间
+
+  - ```xml
+    xmlns:c="http://www.springframework.org/schema/c"
+    <bean id="cdplayer2" class="com.ldc.chapter02.CDPlayer"
+          c:cd-ref="castle"/>
+    ```
+
+  - c-命名空间前缀，构造器参数名，注入bean引用
+
+  - c:_0-ref：参数的索引
+
+  - c:_-ref：若只有一个参数
+
+### 字面量注入
+
+- ```xml
+  <bean id="muse" class="com.ldc.chapter02.BlankDisc">
+      <constructor-arg value="Muse"></constructor-arg>
+      <constructor-arg value="Jolion"></constructor-arg>
+  </bean>
+  <bean id="play" class="com.ldc.chapter02.BlankDisc"
+        c:artist="Jolion"
+        c:_0="Play"/>
+  ```
+
+### 装配集合
+
+- ```xml
+  <constructor-arg>
+      <list>
+          <value>1</value>
+          <value>2</value>
+      </list>
+  </constructor-arg>
+  ```
+
+### 设置属性
+
+- <property>：通过set方法注入属性中
+- p-命名空间：xmlns:p="http://www.springframework.org/schema/p"
+
+### util-命名空间
+
+​	用于装配集合等
+
+- util:constant:引用某个雷星星的public static域，并将其暴露为bean
+- util:list
+- util:map
+- util:propeties
+- util:property-path:引用一个bean的属性（或内嵌属性），并将其暴露为bean
+- util:set
+
+### 混合配置
+
+#### JavaConfig中引入XML配置
+
+- ```java
+  @Configuration
+  @Import(*.class)
+  @ImportResource("classpath:*.xml")
+  ```
+
+#### XML配置中引用JavaConfig
+
+- ```xml
+  <bean class="*.*"/>
+  <import resource=".xml"/>
+  ```
+
+## 高级装配
+
