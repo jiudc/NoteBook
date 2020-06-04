@@ -64,7 +64,7 @@ list、map、property、util:list、p:、c:
 
 ### 生命周期
 
-![image-20200305084321404](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\image-20200305084321404.png)
+![img](https://raw.githubusercontent.com/jiudc/pictures/master/java0-1558500658.jpg)
 
 ### 框架
 
@@ -182,4 +182,260 @@ list、map、property、util:list、p:、c:
   ```
 
 ## 高级装配
+
+### 按照环境装配
+
+#### Java
+
+```java
+@Configuration
+public class DataSourceConfig {
+
+    @Bean(destroyMethod = "shutdown")
+    @Profile("dev")
+    public DataSource dataSource() {
+        return new EmbeddedDatabaseBuilder()
+                .setType(EmbeddedDatabaseType.H2)
+                .addScript("classpath:schema.sql")
+                .build();
+    }
+
+    @Bean
+    @Profile("prd")
+    public DataSource jndiDataSouce() {
+        JndiObjectFactoryBean jndiObjectFactoryBean =
+                new JndiObjectFactoryBean();
+        jndiObjectFactoryBean.setJndiName("jdbc/myDS");
+        jndiObjectFactoryBean.setResourceRef(true);
+        jndiObjectFactoryBean.setProxyInterface(javax.sql.DataSource.class);
+        return (DataSource) jndiObjectFactoryBean.getObject();
+    }
+}
+```
+
+#### xml
+
+```xml
+<beans profile="dev">
+    <jdbc:embedded-database id="dataSource">
+        <jdbc:script location="classpath:schema.sql"/>
+        <jdbc:script location="classpath:test-data.sql"/>
+    </jdbc:embedded-database>
+</beans>
+
+<beans profile="prd">
+    <jee:jndi-lookup id="dataSource" jndi-name="dataSource"
+                     resource-ref="true"
+                     proxy-interface="javax.sql.DataSource"/>
+</beans>
+```
+
+#### 如何激活
+
+​	spring.profiles.active和spring.profiles.default
+
+- 作为DispatcherServlet的初始化参数
+- 作为Web应用的上下文参数
+- 作为JNDI条目
+- 作为环境变量
+- 作为JVM的系统属性
+- 在集成测试类上，使用@ActiveProfiles注解设置
+
+### 条件化Bean
+
+@conditional(ObjectExistCondition.class)
+
+```java
+public class ObjectExistCondition implements Condition {
+    @Override
+    public boolean matches(ConditionContext conditionContext, AnnotatedTypeMetadata annotatedTypeMetadata) {
+        Environment env = conditionContext.getEnvironment();
+        return env.containsProperty("magic");
+
+    }
+}
+```
+
+​	ConditionContext可做到如下几点：
+
+![image-20200529182818748](https://raw.githubusercontent.com/jiudc/pictures/master/image-20200529182818748.png)
+
+- getRegistry()检查bean定义
+- getBeanFactory()检查bean是否存在，探测bean的属性
+- getEnvironment()检查环境变量是否存在以及值
+- getResouceLoader返回ResouceLoader所加载的资源
+- getClassLoader返回ClassLoader加载并检查类是否存在
+
+  AnnotatedTypeMetadata用于检查@Bean注解的方法上还有什么其他的注解
+
+### 处理装配歧义性
+
+#### 标示首选
+
+- @Primary
+- primary="true"
+
+#### 限定自动装配的Bean
+
+- @Qualifier()与Autowired和Inject协同使用，限定符与注入的bean名称紧耦合，对类名的改动会导致限定符时效
+
+- 自定义限定符
+
+  - ```java
+    @Component
+    @Qualifier("cold")
+    ```
+
+  - ```java
+    @Autowired/@Bean
+    @Qualifer("cold")
+    ```
+
+- 自定义注解：可以添加多个限定符
+
+  - ```java
+    @Target({ElementType.CONSTRUCTOR, ElementType.FIELD,
+            ElementType.METHOD, ElementType.TYPE})
+    @Retention(RetentionPolicy.RUNTIME)
+    @Qualifier
+    public @interface Cold {
+    }
+    ```
+
+  - ```java
+    @Component
+    @Cold
+    @Creamy
+    ```
+
+### Bean的作用域
+
+- 单例（Singleton）
+- 原型（Prototype）：每次注入或通过Spring上下文获取均会创建新的
+- 会话（Session）：会话级别
+- 请求（Request）：请求级别
+
+  设置作用域
+
+- 组件扫描发现
+
+  ```java
+  @Component
+  @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+  public class NotePad {
+  }
+  ```
+
+- Java配置
+
+  ```java
+  @Bean
+  @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
+  public NotePad notePad(){
+      return new NotePad();
+  }
+  ```
+
+- xml配置
+
+  ```xml
+  <bean id="notepad" class="com.ldc.chapter03.NotePad"
+                scope="prototype"/>
+  ```
+
+#### 会话和请求作用域
+
+```java
+@Component
+@Scope(value = WebApplicationContext.SCOPE_REQUEST,
+        proxyMode = ScopedProxyMode.INTERFACES)
+public class ShoppingCart {
+}
+```
+
+proxyMode是用于指示代理要实现接口。若修饰的bean类型是接口，则需要修改为
+
+```java
+proxyMode = ScopedProxyMode.TARGET_CLASS
+```
+
+#### XML中申明代理作用域
+
+```xml
+<bean id="notepad" class="com.ldc.chapter03.NotePad"
+    scope="session">
+    <aop:scoped-proxy proxy-target-class="true"/>
+</bean>
+```
+
+### 运行时植入
+
+  避免使用硬编码，Spring提供两种在运行时求值的方式
+
+- 属性占位符
+- Spring表达式语言（SpEL）
+
+#### 注入外部的值
+
+```java
+@Configuration
+@PropertySource("classpath:/com/ldc/chapter03/cd.properties")
+public class EnvConfig {
+    @Autowired
+    Environment env;
+    @Bean
+    public BlankDisc blankDisc(){
+        return new BlankDisc(env.getProperty("cd.artist"),env.getProperty("cd.title"),
+                Collections.singletonList(env.getProperty("cd.tracks")));
+    }
+}
+```
+
+​	通过PropertySource可以将文件里面的类容加载到env中，通过getProperty()
+
+- String getProperty(String key,【String defaultValue】)
+- T getProperty(String key, Class<T> type, 【T defaultValue】)
+- getRequiredProperty()
+- containsProperty()
+- getPropertyAsClass()：将属性解析为类
+- 检查哪些profile处于激活状态
+  - getActiveProfiles()
+  - getDefaultProfiles()
+  - acceptsProfile(String... profiles)：如果environment支持给定profile，返回true
+
+#### 占位符
+
+- 组件扫描或者自动装配
+
+  ```java
+  public BlankDisc(@Value("${disc.title}") String title, @Value("${disc.artist}")String artist, List<String> tracks) {
+      this.title = title;
+      this.artist = artist;
+      this.tracks = tracks;
+  }
+  ```
+
+- xml
+
+  ```xml
+      &lt;bean id=&quot;play&quot; class=&quot;com.ldc.chapter02.BlankDisc&quot;
+            c:artist=&quot;Jolion&quot;
+            c:_0=&quot;${cd.title}&quot;
+            c:_2-ref=&quot;trackList&quot;/&gt;  
+  ```
+
+  要使用占用符，需要配置PropertyPlaceholderConfigure或PropertySourcePlaceholerConfigure。推荐后者。使用XML则<context:property-placeholder>
+
+### 使用Spring表达式语言进行装配
+
+​	Spring Expression Language，使用#{}
+
+- 表示字面值
+- 使用bean的ID来引用bean
+- 调用方法和访问对象的属性
+- 对值进行算数、关系和逻辑运算
+- 正式表达式匹配
+- 集合操作
+
+
 
