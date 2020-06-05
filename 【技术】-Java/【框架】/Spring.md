@@ -430,12 +430,82 @@ public class EnvConfig {
 
 ​	Spring Expression Language，使用#{}
 
-- 表示字面值
+- 表示字面值：
+  - #{3.14}
+  - #{9.87E4}科学计数
+  - #{'Hello'} String
+  - #{false} 布尔类型
 - 使用bean的ID来引用bean
+  - #{sgtPepper}
 - 调用方法和访问对象的属性
+  - #{sgtPepper.artist} 属性
+  - #{sgtPepper.selectArtist().toUpperCase()} 调用方法，若出现null，可通过类型安全的运算符#{sgtPepper.selectArtist()?.toUpperCase()}
+- 在表达式中使用类型
+  - T()结果会是一个Class对象，如T(java.lang.Math).PI
 - 对值进行算数、关系和逻辑运算
+  - 算数运算，+、-、*、/、%、^
+  - 比较运算，<、>、<=、>=、lt、gt、eq、le、ge
+  - 逻辑运算，and、or、not、|
+  - 条件运算，？:(ternary)
+  - 正则表达式，matches
+  - 举例：#{2 * T(java.lang.Math).PI * circle.radius)
 - 正式表达式匹配
+  - #{admin.emal mathes '[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\\\.com'}
 - 集合操作
+  - #{jukebox.song[4].title}
+  - #{jukebox.song[T(java.lang.Math).random()*junkebox.songs.size()].title}
+    - .?[]:表达式的计算结果为true，name条目会放到新的集合中
+    - .^[]:集合中查询第一个匹配项
+    - .$[]:集合中最后一个匹配项
+    - .![]：投影运算符，它会从集合的每个成员中选择特定的属性放到另一个集合中
+
+## 切面
+
+### 术语
+
+#### 通知（Advice）
+
+- 前置通知(Before)
+- 后置通知(After)
+- 返回通知(After-returning)
+- 异常通知(After-throwing)
+- 环绕通知(Around)
+
+#### 连接点
+
+​	应用执行过程中能够插入切面的一个点
+
+#### 切点
+
+​	匹配通知所要织入的一个或多个连接点
+
+#### 切面
+
+​	通知和切点的结合。通知和切点共同定义了切面的全部内容。
+
+#### 引入
+
+   向现有的类添加新方法或属性
+
+#### 织入
+
+​	把切面应用到目标对象并创建新的代理对象的过程。
+
+- 编译器：在目标类编译时被织入
+- 类加载期：在目标类加载到JVM被织入。需要特殊的类加载器（ClassLoader）
+- 运行期：在应用运行时刻织入
+
+### Spring对AOP的支持
+
+- 基于代理的经典Spring AOP
+  - Spring通知是java编写的
+  - Spring在运行时通知对象
+  - Spring只支持方法级别的连接点，不支持字段和构造器
+- 纯POJO切面
+- @AspectJ注解驱动的切面
+- 注入式AspectJ切面
+
+### 通过切点来选择连接点
 
 
 
