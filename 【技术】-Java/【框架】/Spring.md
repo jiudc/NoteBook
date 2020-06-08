@@ -467,8 +467,8 @@ public class EnvConfig {
 
 - 前置通知(Before)
 - 后置通知(After)
-- 返回通知(After-returning)
-- 异常通知(After-throwing)
+- 返回通知(AfterReturning)
+- 异常通知(AfterThrowing)
 - 环绕通知(Around)
 
 #### 连接点
@@ -507,5 +507,160 @@ public class EnvConfig {
 
 ### 通过切点来选择连接点
 
+- arg():限定连接点匹配参数为指定类型的执行方法
 
+- @args():限制连接点匹配参数由指定注解标注的执行方法
 
+- execution():用于匹配是连接点的执行方法
+
+- this():限制连接点匹配AOP代理的bean引用为指定类型的类
+
+- target:限制连接点匹配目标对象为指定类型的类
+
+- @target():限制连接点匹配特定的执行对象，这些对象对应的类具有指定类型的注解
+
+- within():限定连接点匹配指定的类型
+
+- @within():限定连接点匹配指定注解所标注的类型
+
+- @annotation:限定匹配带有指定注解的连接点
+
+- @bean()
+
+  举例：execution(* connert.Performance.perform(...)) && within(concert.*)
+
+  execution(* connert.Performance.perform(...)) and !bean('woodstock')
+
+### 使用注解创建切面
+
+​	AspectJ 5引入。
+
+#### 定义切面
+
+```java
+@Aspect
+public class Audience {
+
+    @Pointcut("execution(* com.ldc.chapter04.Performance.perform(..))")
+    public void performance() {
+    }
+
+    @Before("performance()")
+    public void silenceCellPhones() {
+        System.out.println("Silencing cell phones");
+    }
+
+    @Before("performance()")
+    public void takeSeats() {
+        System.out.println("Taking seats");
+    }
+
+    @AfterReturning("performance()")
+    public void applause() {
+        System.out.println("CLAP CLAP CLAP");
+    }
+
+    @AfterThrowing("performance()")
+    private void demandRefund() {
+        System.out.println("Demanding  a refund");
+    }
+
+}
+```
+
+#### 启动自动代理
+
+- java：@EnableAspectJAutoProxy
+
+  ```java
+  @Configuration
+  @EnableAspectJAutoProxy
+  @ComponentScan
+  public class ConcertConfig {
+      @Bean
+      public Audience audience() {
+          return new Audience();
+      }
+  
+      @Bean
+      public Performance performance() {
+          return new JolinPerformance();
+      }
+  }
+  ```
+
+- xml：<aop:aspectj-autoproxy/>
+
+  ```xml
+  <?xml version="1.0" encoding="UTF-8"?>
+  <beans xmlns="http://www.springframework.org/schema/beans"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns:context="http://www.springframework.org/schema/context"
+         xmlns:aop="http://www.springframework.org/schema/aop"
+         xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/aop https://www.springframework.org/schema/aop/spring-aop.xsd">
+      <context:component-scan base-package="com.ldc.chapter04"/>
+      <aop:aspectj-autoproxy/>
+      <bean class="com.ldc.chapter04.Audience"/>
+      <bean class="com.ldc.chapter04.JolinPerformance"/>
+  </beans>
+  ```
+
+- 环绕通知：ProceedingJoinPoint ，jp.proceed();
+
+  ```java
+  @Aspect
+  public class Audience {
+  
+      @Pointcut("execution(* com.ldc.chapter04.Performance.perform(..))")
+      public void performance() {
+      }
+  
+      @Around("performance()")
+      public void watchPerformance(ProceedingJoinPoint jp){
+          try{
+              System.out.println("Silencing cell phones");
+              System.out.println("Taking seats by jp");
+              jp.proceed();
+              System.out.println("CLAP CLAP CLAP");
+          }catch (Throwable e){
+              System.out.println("Demanding  a refund");
+          }
+      }
+  }
+  ```
+
+- 处理通知中的参数
+  execution(* connert.Performance.perform(int)) && args(num)
+
+- 引入新功能
+
+  ```java
+  @Aspect
+  public class ExtendAspectConfig {
+      @DeclareParents(value = "com.ldc.chapter04.Performance+",
+              defaultImpl = DefaultEncoreable.class)
+      public static Encoreable encoreable;
+  }
+  ```
+
+#### 在XML中申明切面
+
+| AOP配置元素                           | 用途                                     |
+| ------------------------------------- | ---------------------------------------- |
+| \<aop:advisor\>                       | 通知器                                   |
+| \<aop:after> before                   | 后置/前置                                |
+| \<aop:after-returning> after-throwing | 返回/异常                                |
+| \<aop:around>                         | 环绕                                     |
+| \<aop:aspect> aspectj-autoproxy       | 定义切面/启动@AspectJ注解驱动的切面      |
+| \<aop:config>                         | 顶层的AOP配置元素                        |
+| \<aop:declare-parents>                | 以透明的方式为被通知的对象引入额外的接口 |
+| \<aop:pointcut>                       | 切点                                     |
+
+切面引入新的功能：
+
+- default-impl：直接标志委托
+- delegate-ref：间接委托，区别在于它是bean
+
+### 注入AspectJ
+
+ AspectJ需要使用factory-method=“aspectOf”初始化
