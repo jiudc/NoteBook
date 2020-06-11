@@ -520,22 +520,172 @@ Transform
 
 ## SparkContext初始化
 
+- Driver Application执行和输出都是通过SparkContext来完成
+- 网络通信
+- 分布式部署
+- 消息通信
+- 存储能力
+- 计算能力
+- 缓存
+- 测量系统
+- 文件服务
+-  Web服务
+- 内置DAGScheduler负责创建Job，将DAG中的RDD划分到不同Stage
+- 内置TaskScheduler负责资源申请、任务的提交及请求集群对任务的调度
+
 ### SparkConf
 
-​	ConcurrentHashMap，"spark."
+- 通过ConcurrentHashMap维护Spark配置属性
+
+```scala
+if (loadDefaults) {
+  loadFromSystemProperties(false)
+}
+```
+
+### SparkContext初始化
 
 1. 创建Spark执行环境SparkEnv
+
+   ```scala
+   // Create the Spark execution environment (cache, map output tracker, etc)
+   _env = createSparkEnv(_conf, isLocal, listenerBus)
+   SparkEnv.set(_env)
+   ```
+
+   ```scala
+   SparkEnv.createDriverEnv(conf, isLocal, listenerBus, SparkContext.numDriverCores(master, conf))
+   ```
+
+   ```scala
+   // Set our own authenticator to properly negotiate user/password for HTTP connections.
+   // This is needed by the HTTP client fetching from the HttpServer. Put here so its
+   // only set once.
+   if (authOn) {
+     Authenticator.setDefault(
+       new Authenticator() {
+         override def getPasswordAuthentication(): PasswordAuthentication = {
+           var passAuth: PasswordAuthentication = null
+           val userInfo = getRequestingURL().getUserInfo()
+           if (userInfo != null) {
+             val  parts = userInfo.split(":", 2)
+             passAuth = new PasswordAuthentication(parts(0), parts(1).toCharArray())
+           }
+           return passAuth
+         }
+       }
+     )
+   }
+   ```
+
+   ```scala
+   val executorId: String,
+   private[spark] val rpcEnv: RpcEnv,
+   val serializer: Serializer,
+   val closureSerializer: Serializer,
+   val serializerManager: SerializerManager,
+   val mapOutputTracker: MapOutputTracker,
+   val shuffleManager: ShuffleManager,
+   val broadcastManager: BroadcastManager,
+   val blockManager: BlockManager,
+   val securityManager: SecurityManager,
+   val metricsSystem: MetricsSystem,
+   val memoryManager: MemoryManager,
+   val outputCommitCoordinator: OutputCommitCoordinator,
+   val conf: SparkConf
+   ```
+
 2. 创建RDD清理器metedataClearner
+
 3. 创建并初始化Spark UI
+
 4. Hadoop相关配置及Executor环境变量的设置
+
 5. 创建任务调度TaskScheduler
+
 6. 创建和启动DAGScheduler
+
 7. TaskScheduler启动
+
 8. 初始化块管理器BlockManager
+
 9. 启动测量系统MetricsSystem
+
 10. 创建和启动Executor分配管理器ExecutorAllocationManager
+
 11. ContextCleaner的创建和启动
+
 12. Spark环境更新
+
 13. 创建DAGSchedulerSource和BlockManagerSource
+
 14. 将SparkContext编辑为激活
+
+```scala
+// The call site where this SparkContext was constructed.
+private val creationSite: CallSite = Utils.getCallSite()
+
+// If true, log warnings instead of throwing exceptions when multiple SparkContexts are active
+private val allowMultipleContexts: Boolean =
+  config.getBoolean("spark.driver.allowMultipleContexts", false)
+
+// In order to prevent multiple SparkContexts from being active at the same time, mark this
+// context as having started construction.
+// NOTE: this must be placed at the beginning of the SparkContext constructor.
+SparkContext.markPartiallyConstructed(this, allowMultipleContexts)
+```
+
+- CallSite：存储线程栈中靠近栈顶的用户类及靠近栈底的Scala或者Spark核心类信息
+-  allowMultipleContexts：Spark默认是一个实例
+- markPartiallyConstructed：用来确保实例的唯一性，并将当前的SparkContext标记为正在构建中
+
+```scala
+_conf = config.clone()
+_conf.validateSettings()
+
+if (!_conf.contains("spark.master")) {
+  throw new SparkException("A master URL must be set in your configuration")
+}
+if (!_conf.contains("spark.app.name")) {
+  throw new SparkException("An application name must be set in your configuration")
+}
+```
+
+- 复制配置
+- 校验配置信息
+
+## 存储体系
+
+  优先使用各节点的内存作为存储
+
+## 计算引擎
+
+- DAGScheduler
+- RDD
+- 具体节点上Executor负责执行的Map和Reduce任务
+
+## 部署模式
+
+## 模式设计
+
+### 编程模型
+
+1. 用户使用SparkContext的API编写Driver Application程序
+2. 使用SparkContext提交的用户应用程序
+   1. 使用BlockManager和BroadcastManager将任务的Hadoop配置进行广播
+   2. DAGScheduler将任务转换为RDD并组成DAG
+   3. TaskScheduler借助ActorSystem将任务提交给集群管理器
+3. 集群管理器给任务分配资源
+
+### RDD计算模型
+
+- 分区数量取决于partition
+- 每个分区的数据只在一个Task中计算
+
+## Spark基本架构
+
+- Clunster Manager：集群管理器，负责资源的分配与管理
+- Worker：创建Executor，将资源和任务进一步分配给Executor，同步资源信息给Cluster Manager
+- Executor：执行任务的一线进程
+- Driver App：客户端驱动程序，用于将任务和程序转换为DAG和RDD，并与Cluster Manager进行通信
 
