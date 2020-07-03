@@ -120,5 +120,42 @@
 
 ![image-20200527163401715](https://raw.githubusercontent.com/jiudc/pictures/master/image-20200527163401715.png)
 
- ATL+7
+### 类注释
 
+```java
+/**
+ * @ClassName ${NAME}.java
+ * @author admin
+ * @version 1.0.0
+ * @Description TODO
+ * @createTime ${YEAR}年${MONTH}月${DAY}日 ${HOUR}:${MINUTE}:00
+ */
+```
+
+### 方法注释
+
+增加template group，名为methodTemplates，增加live template
+
+```java
+/**
+ * @title $title$
+ * @description $description$
+ * @author admin $param$
+ * @updateTime $date$ $TIME$ $return$
+ * @throws $throws$
+ */
+```
+
+增加变量
+
+param：
+
+```groovy
+groovyScript("def result=''; def stop=false; def params=\"${_1}\".replaceAll('[\\\\[|\\\\]|\\\\s]', '').split(',').toList(); if (params.size()==1 && (params[0]==null || params[0]=='null' || params[0]=='')) { stop=true; }; if(!stop) { for(i=0; i < params.size(); i++) {result +=((i==0) ? '\\r\\n' : '') + ((i < params.size() - 1) ? ' * @param: ' + params[i] + '\\r\\n' : ' * @param: ' + params[i] + '')}; }; return result;", methodParameters())
+```
+
+return：
+
+```groovy
+groovyScript("def result=''; def data=\"${_1}\"; def stop=false; if(data==null || data=='null' || data=='' || data=='void' ) { stop=true; }; if(!stop) { result += '\\r\\n' + ' * @return: ' + data; }; return result;", methodReturnType())
+```

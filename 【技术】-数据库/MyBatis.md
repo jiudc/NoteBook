@@ -20,7 +20,10 @@ ${}符号表示拼接SQL串，将接收到的内容不加任何修饰地拼接�
 
 ```xml
 <properties resource="db.properties">
+    <!--启用默认值特性-->
     <property name="org.apache.ibatis.parsing.PropertyParser.enable-default-value" value="true"/>
+    <!-- 修改默认值的分隔符 -->
+    <property name="org.apache.ibatis.parsing.PropertyParser.default-value-separator" value="?:"/>
 </properties>
 <property name="username" value="${db.username:root}"/>
 ```
@@ -75,3 +78,4 @@ ${}符号表示拼接SQL串，将接收到的内容不加任何修饰地拼接�
 1. 编写类型处理类
 2. 在MyBatis全局配置自己的类型处理器
 3. 在SQL映射配置文件中使用
+4. 
