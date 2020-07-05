@@ -36,8 +36,8 @@ list、map、property、util:list、p:、c:
 
 ### 自动装配
 
-1. byType：xml中autowire=“byName”
-2. byNames：xml中autowire=“byTpe”
+1. byType：xml中autowire=“byType”
+2. byNames：xml中autowire=“byName”
 
 1. SET方法注入：Property
 2. 构造方法注入：Constructor-org
@@ -83,21 +83,50 @@ list、map、property、util:list、p:、c:
 1. 组件扫描
 2. 自动装配
 
-- @Component();
+- @Component();    //类名的第一个字母变成小写
 - @Component(“bean_name”);
 - @Named();
 - @ComponentScan();
 - @ComponentScan(“Libname”);
 - @ComponentScan(basePackages = “Libname”);
 - @ComponentScan(basePackages = {“Nm1”,”Nm2”});
-- @ComponentScan(basePackageClases ={CDplayer.class,DVDPlayer.class});
+- @ComponentScan(basePackageClases ={CDplayer.class,DVDPlayer.class});    //类所在的包作为组件扫描的基础包
+- @ContextConfiguration(classes=CDPlayer.class);    //从类中加载配置，该类可使用@ComponentScan注解
 - @Autowired;
   - 可用于构造器
   - 属性的Setter方法
-  - 类的任何方法，Spring都会尝试满足方法参数上所申明的依赖，若没有匹配的bean，那么在应用上下文创建的时候回抛出异常。
+  - 类的任何方法，Spring都会尝试满足方法参数上所申明的依赖，若没有匹配的bean，那么在应用上下文创建的时候会抛出异常。
     - @Autowired(required=false);若Spring没有找到合适的bean不会报异常，使得该bean处于未装配状态
 - @Bean:
   - 告诉Spring这个方法将会返回一个对象，该对象要注册为Spring应用上下文的bean
+
+### Java显式装配
+
++ @Bean：
+
+  + 告诉Spring这个方法将会返回一个对象，该对象要注册为Spring应用上下文的bean
+
+  + 默认，bean的ID与带有@Bean注解的方法名一样
+
+  + @Bean(name="beanName")：为bean指定名称
+
+  + ```java
+    @Bean
+    public CompactDisc sgtPeppers(){
+            return new SgtPeppers();
+    }
+    ```
+
+  + 可以通过构造器或者Setter方法注入bean对象
+
+  + ```java
+    @Bean
+    public CDPlayer cdPlayer(CompactDisc cd){
+            return new CDPlayer(cd);
+    }
+    ```
+
+  + 使用这种方式引入bean不要求注入的对象和本对象在同一个配置类中，被注入的对象可以通过组件扫描或者XML配置
 
 ## XML装配
 
