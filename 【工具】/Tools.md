@@ -34,5 +34,5 @@
 - https://picgo.github.io/PicGo-Doc/zh/guide/config.html#
 - 图床git：4a0a4c5d8e826948381d02bcdee701b8bffcdf8c
 
-
+## XMind
 
