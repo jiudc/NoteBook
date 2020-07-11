@@ -175,7 +175,16 @@ list、map、property、util:list、p:、c:
           <value>2</value>
       </list>
   </constructor-arg>
+  
+  <constructor-arg>
+      <set>
+          <value>1</value>
+          <value>2</value>
+      </set>
+  </constructor-arg>
   ```
+
+<set>和<list>都可用于装配集合，但是set会忽略重复值，且数组的存放无序
 
 ### 设置属性
 
@@ -186,7 +195,7 @@ list、map、property、util:list、p:、c:
 
 ​	用于装配集合等
 
-- util:constant:引用某个雷星星的public static域，并将其暴露为bean
+- util:constant:引用某个类型的public static域，并将其暴露为bean
 - util:list
 - util:map
 - util:propeties
@@ -200,6 +209,7 @@ list、map、property、util:list、p:、c:
 - ```java
   @Configuration
   @Import(*.class)
+  @Import({A.class, B.class})
   @ImportResource("classpath:*.xml")
   ```
 
@@ -215,6 +225,8 @@ list、map、property、util:list、p:、c:
 ### 按照环境装配
 
 #### Java
+
+@Profile可用于类级别和方法级别注解，与@Bean注解一起使用。没有指定@Profile的bean都会被创建
 
 ```java
 @Configuration
@@ -306,27 +318,36 @@ public class ObjectExistCondition implements Condition {
 
 #### 限定自动装配的Bean
 
-- @Qualifier()与Autowired和Inject协同使用，限定符与注入的bean名称紧耦合，对类名的改动会导致限定符时效
+- @Qualifier()与Autowired和Inject协同使用，限定符与注入的bean名称紧耦合，对类名的改动会导致限定符失效
+
+- ```java
+      @Autowired
+      @Qualifier("iceCream")
+      public void setDessert(Dessert dessert) {
+          this.dessert = dessert;
+      }
+  ```
 
 - 自定义限定符
 
   - ```java
-    @Component
+    @Component/@Bean
     @Qualifier("cold")
-    ```
-
+    
+  ```
+    
   - ```java
-    @Autowired/@Bean
+    @Autowired
     @Qualifer("cold")
     ```
 
-- 自定义注解：可以添加多个限定符
+- 自定义限定符注解：可以添加多个限定符
 
   - ```java
     @Target({ElementType.CONSTRUCTOR, ElementType.FIELD,
             ElementType.METHOD, ElementType.TYPE})
     @Retention(RetentionPolicy.RUNTIME)
-    @Qualifier
+    @Qualifier   
     public @interface Cold {
     }
     ```
@@ -339,7 +360,7 @@ public class ObjectExistCondition implements Condition {
 
 ### Bean的作用域
 
-- 单例（Singleton）
+- 单例（Singleton）：整个应用只创建bean的一个实例，默认为单例的作用域
 - 原型（Prototype）：每次注入或通过Spring上下文获取均会创建新的
 - 会话（Session）：会话级别
 - 请求（Request）：请求级别
@@ -376,13 +397,13 @@ public class ObjectExistCondition implements Condition {
 
 ```java
 @Component
-@Scope(value = WebApplicationContext.SCOPE_REQUEST,
+@Scope(value = WebApplicationContext.SCOPE_SESSION,
         proxyMode = ScopedProxyMode.INTERFACES)
 public class ShoppingCart {
 }
 ```
 
-proxyMode是用于指示代理要实现接口。若修饰的bean类型是接口，则需要修改为
+proxyMode属性是用于指示代理要实现接口。若将ShoppingCart注入到StoreService类，Spring会注入一个到ShoppingCart的代理。当商场类调用被购物车对象方法时，代理会对其进行懒解析并将调用委托给会话作用域内真正的购物车bean。若修饰的bean类型是类，则需要修改为
 
 ```java
 proxyMode = ScopedProxyMode.TARGET_CLASS
@@ -424,8 +445,8 @@ public class EnvConfig {
 
 - String getProperty(String key,【String defaultValue】)
 - T getProperty(String key, Class<T> type, 【T defaultValue】)
-- getRequiredProperty()
-- containsProperty()
+- getRequiredProperty()：若属性没定义会抛异常
+- containsProperty()：检查属性是否存在
 - getPropertyAsClass()：将属性解析为类
 - 检查哪些profile处于激活状态
   - getActiveProfiles()
@@ -471,6 +492,7 @@ public class EnvConfig {
   - #{sgtPepper.selectArtist().toUpperCase()} 调用方法，若出现null，可通过类型安全的运算符#{sgtPepper.selectArtist()?.toUpperCase()}
 - 在表达式中使用类型
   - T()结果会是一个Class对象，如T(java.lang.Math).PI
+  - T()能够访问目标类型的静态方法和常量
 - 对值进行算数、关系和逻辑运算
   - 算数运算，+、-、*、/、%、^
   - 比较运算，<、>、<=、>=、lt、gt、eq、le、ge
