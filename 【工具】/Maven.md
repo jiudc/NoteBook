@@ -535,4 +535,16 @@ import依赖：指向打包类型为pom的模块
 
 - 包输出目录为target/
 
-超级POM，任何一个Maven项目都隐式地继承自该POM，在maven 3，超级POM在文件$
+超级POM，任何一个Maven项目都隐式地继承自该POM，在maven 3，超级POM在文件$MAVEN_HOME/lib/maven-model-builder-x.x.x.jar
+
+### 反应堆
+
+  反应堆包含个模块之间继承与依赖关系。
+
+### 裁剪反应堆
+
+- -am：--also-make 同时构建所列模块的依赖模块
+- -amd：--also-make-dependents 同时构建依赖于所列模块的模块
+- -pl：--project <arg> 构建指定的模块，模块间用逗号隔开
+- -rf：--resume-form <arg> 从指定的模块恢复反应堆
+- 
