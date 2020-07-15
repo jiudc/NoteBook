@@ -547,4 +547,11 @@ import依赖：指向打包类型为pom的模块
 - -amd：--also-make-dependents 同时构建依赖于所列模块的模块
 - -pl：--project <arg> 构建指定的模块，模块间用逗号隔开
 - -rf：--resume-form <arg> 从指定的模块恢复反应堆
-- 
+
+## 使用Nexus构建私服
+
+### 安装
+
+1. BUndle方式
+2. WAR方式
+
