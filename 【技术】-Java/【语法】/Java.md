@@ -1104,6 +1104,13 @@ Public @interface AnnotationName{}
 
 ## 多线程
 
+- New状态表示刚刚创建的线程，这种线程还没有开始执行 
+- RUNNABLE:当线程创建好之后，调用线程的start方法就会进入就绪状态。 
+- BLOCKED:当线程运行过程如果遇到了Syschronized就会进入阻塞状态。 
+- TIMED_WATING:表示等待状态，有时间限制的（sleep） 
+- WAITING:表示进入一个无时间限制的等待状态（wait） 
+- TERMINATED：表示结束状态
+
 创建线程：
 
 - 实现Runnable接口

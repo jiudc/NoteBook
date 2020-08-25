@@ -91,10 +91,77 @@ val\var VariableName : DataType [= Initial Value]
 
 ## 运算符
 
+取消了++和--运算符，移除了?:
+
 - 算数运算符：+、-、*、/、%
 - 关系运算符：==、!=、>、<、>=、<=
 - 逻辑运算符：&&、||、！
 - 位运算：&、|、^、~、<<、>>、>>>
+
+## 操作流程
+
+取消了switch分支
+
+```scala
+for(i<-arr)println(i)
+for(i<-1 to 10)println(i)
+for(i<-1 until 10)println(i)
+```
+
+根据数组下标迭代元素,indices本质上是一个对0 until length的一个包装
+
+```scala
+for(index<-arr.indices)println(s"第${index}个位置;${arr(index)}")
+```
+
+没有continue，取而代之是循环守卫概念
+
+```scala
+//输出0-10以内的偶数。
+for(i <- 0 to 10 if i % 2 ==0) { println(i)}
+```
+
+```scala
+for{i <- arr.indices
+    j <- 0 until arr.length-i-1
+    if arr(j) > arr(j+1)
+   }{
+    var temp = arr(j)
+    arr(j) = arr(j+1)
+    arr(j+1) = temp
+}
+```
+
+使用Range类进行跨步长迭代，构造区间为[start,end)
+
+```scala
+Range(start:Int,end:Int,step:Int)
+//即通过起始下标，终止下标，步长来生成一个等差为step的数列。注意，生成的序列中不包含end，但是包含start。
+```
+
+利用yield收集数据
+
+```scala
+//将每一个元素i装载到list内。
+val ints: immutable.IndexedSeq[Int] = for(i <- Range(1,10,3)) yield i
+```
+
+取消了break，可使用主动抛异常的方式实现中断
+
+```scala
+import scala.util.control.Break._
+//breakable是一个控制抽象。内部执行一个()=>Unit的函数。
+breakable(() => {
+  var i = 0
+  while (i < 10) {
+    if (i == 5) break()
+    i += 1
+  }
+}
+)
+```
+
+
 
 ## 方法和函数
 
