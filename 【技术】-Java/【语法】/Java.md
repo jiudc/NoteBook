@@ -1238,7 +1238,9 @@ public interface Callable<V> {
 
 ## 类加载机制与反射
 
-正常方式：引入需要的“包.类”名称->通过new实例化->取得实例化
+![img](https://p1-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/5894b04c0c3a4481936fb18c372b9cd1~tplv-k3u1fbpfcp-zoom-1.image)
+
+正常方式：引入需要的“包.类”名称->通过new实例化->取得实例化】
 
 反射方式：实例化对象->getClass()方法->得到完整的包.类名称
 
