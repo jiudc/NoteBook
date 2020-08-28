@@ -1252,12 +1252,74 @@ Class的常用方法：forName()/getConstructors()/getDeclaredFields()(单独定
 2. New X().getClass();//需要明确的类
 3. X.class();
 
+每个类的Class对象只有一个。
+
+### 构造类的实例化对象
+
+1. Class对象调用newInstance()方法
+
+   ```java
+   Class.forName("...").newInstance()
+   ```
+
+2. Constructor构造器调用newInstance()方法
+
+   ```java
+   Constructor constructor Class.forName("...").getConstrucor(para.class);
+   constructor.setAccessible(true);
+   constructor.newInstance(para);
+   ```
+
+### 获取类中的变量（Field）
+
+- Field[] getFields()：获取类中所有被`public`修饰的所有变量
+- Field getField(String name)：根据**变量名**获取类中的一个变量，该**变量必须被public修饰**
+- Field[] getDeclaredFields()：获取类中所有的变量，但**无法获取继承下来的变量**
+- Field getDeclaredField(String name)：根据姓名获取类中的某个变量，**无法获取继承下来的变量**
+
+### 获取类中的方法（Method）
+
+- Method[] getMethods()：获取类中被`public`修饰的所有方法
+- Method getMethod(String name, Class...<?> paramTypes)：根据**名字和参数类型**获取对应方法，该方法必须被`public`修饰
+- Method[] getDeclaredMethods()：获取`所有`方法，但**无法获取继承下来的方法**
+- Method getDeclaredMethod(String name, Class...<?> paramTypes)：根据**名字和参数类型**获取对应方法，**无法获取继承下来的方法**
+
+### 获取类的构造器（Constructor）
+
+- Constuctor[] getConstructors()：获取类中所有被`public`修饰的构造器
+- Constructor getConstructor(Class...<?> paramTypes)：根据`参数类型`获取类中某个构造器，该构造器必须被`public`修饰
+- Constructor[] getDeclaredConstructors()：获取类中所有构造器
+- Constructor getDeclaredConstructor(class...<?> paramTypes)：根据`参数类型`获取对应的构造器
+
+每种功能以Declared细分为2类：
+
+Declared可获取内部包含的所有变量、方法和构造器，但是无法获取**继承下来的信息**
+
+无Decleared可获取该类的public修饰的变量、方法和构造器，可获取继承下来的信息
+
+父类的属性使用protected修饰，利用反射是无法获取到的
+
+### 获取注释
+
+**反射中，Field，Constructor 和 Method 类对象都可以调用下面这些方法获取标注在它们之上的注解。**
+
+- Annotation[] getAnnotations()：获取该对象上的**所有注解**
+- Annotation getAnnotation(Class annotaionClass)：传入`注解类型`，获取该对象上的特定一个注解
+- Annotation[] getDeclaredAnnotations()：获取该对象上的显式标注的所有注解，无法获取`继承`下来的注解
+- Annotation getDeclaredAnnotation(Class annotationClass)：根据`注解类型`，获取该对象上的特定一个注解，无法获取`继承`下来的注解
+
+只有注解的`@Retension`标注为`RUNTIME`时，才能够通过反射获取到该注解，@Retension 有`3`种保存策略：
+
+- `SOURCE`：只在**源文件(.java)**中保存，即该注解只会保留在源文件中，**编译时编译器会忽略该注解**，例如 @Override 注解
+- `CLASS`：保存在**字节码文件(.class)**中，注解会随着编译跟随字节码文件中，但是**运行时**不会对该注解进行解析
+- `RUNTIME`：一直保存到**运行时**，**用得最多的一种保存策略**，在运行时可以获取到该注解的所有信息
+
 ### 调用类中的方法
 
 - C = Class.forName(“java.util.***”);//实例化class对象
 - Obj = c.newInstance();//实例化操作对象，对象中需要有无参构造函数
 - Met = obj.getClasss().getMethod(methodName,methodParameter1Type,…);//获取参数方法
-- Met.invoke(obj, methodParameter1,…);//调用方法
+- Met.invoke(obj, methodParameter1,…);//调用方法，如果**调用静态方法则参数1传入参数null**
 
 ### 操作属性
 
@@ -1324,6 +1386,17 @@ class MyInvocationHandler implements InvocationHandler{
     }
 }
 ```
+
+### 反射的优势和曲线
+
+#### 优点
+
+- 增加程序的灵活性
+
+#### 缺点
+
+- 破坏类的封装性
+- 性能损耗
 
 ## JVM
 
