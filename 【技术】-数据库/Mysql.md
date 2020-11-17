@@ -63,4 +63,33 @@ connector
 
 1. InnoDB用户无法手动创建哈希索引
 2. InnDB会自调优，如果判定建立自适应哈希索引能够提升效益，InnoDB自己会建立相关哈希索引
-3. 
+
+## 事务管理
+
+事务提交后，必须将事务对数据页的修改刷(fsync)写到磁盘上，才能保证事务的ACID特征。
+
+这个刷盘是随机写，随机写性能较低，会造成性能较低。
+
+InnoDB通过1）将随机写改成顺序写；2）将单次写改成批量写的方式提升性能。
+
+redo log落盘步骤：
+
+1. 事务提交时，会调用MySQL自己的函数WriteRedolog写入Log Buffer
+2. 只有当MySQL发起系统调用写文件write时，Log Buffer里的数据才会写到OS cache。
+3. 操作系统（MYSQL主动flush）将OS cache中的数据fsync到磁盘上。
+
+优点：操作系统将缓冲数据写入到OS cache中，可以提高操作系统性能。缓冲数据到Log Buffer里，可以提高数据库性能
+
+缺点：可能丢失数据
+
+1. 事务提交时，将redo log写入Log Buffer，就会认为成功
+2. 如果写入Log Buffer，write入OS cache之前，数据库崩溃，就会出现数据丢失
+3. 如果写入OS cache的数据，fsync磁盘之前，操作系统奔溃，也可能出现数据丢失。
+
+MySQL提供参数innodb_flush_log_at_trxcommit
+
+1. 最佳性能（=0），每隔一秒，才将LogBuffer的数据批量write入OS cache，同时MySQL主动fsync
+2. 强一致(=1)，每次事务均将LogBuffer的数据批量write入OS cache，同时MySQL主动fsync
+3. 折中（=2），每次事务提交将LogBuffer的数据批量write入OS cache，每隔一秒MySQL主动fsync
+
+高并发业务，行业内的最佳实践是2
