@@ -44,7 +44,7 @@ ssh-keygen –t rsa –C “mail”
 
 ### 修改本地主目录路径
 
-- 修改起始位置
+- 修改起始位置 
 - 删除目标后的cd-to-home，可实现bash启动默认指向该文件夹
 - 新建环境变量HOME
 - 将原目录下的.ssh\.gitconfig\.bash_history等文件拷贝到新目录下即可
