@@ -334,12 +334,13 @@ public class ObjectExistCondition implements Condition {
     @Component/@Bean
     @Qualifier("cold")
     
+    ```
   ```
     
   - ```java
     @Autowired
     @Qualifer("cold")
-    ```
+  ```
 
 - 自定义限定符注解：可以添加多个限定符
 
