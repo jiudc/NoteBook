@@ -1,5 +1,11 @@
 # Scala核心编程
 
+## Scale特性
+
+### 面向对象特征
+
+类抽象机制的扩展有两种途径
+
 ## Scala概述
 
 REPL：Read-Evaluation-Print-Loop
