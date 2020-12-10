@@ -28,11 +28,13 @@ SparkEnv是Spark执行的环境对象，会出现在Driver或者CoarseGrainedExe
 
 #### 创建metadataCleaner
 
-
+SparkContext为了保持对所有持久化的RDD的跟踪，使用类型是TimeStampedWeakValueHashMap的persistentRdds缓存。metadataCleaner的功能是清除过期的持久化RDD。实质是启动一个定时器。
 
 #### 创建RDD清理器metadataCleaner
 
 #### 创建并初始化Spark UI
+
+采用监听模式。
 
 #### Hadoop相关配置及Executor环境变量的设置
 
