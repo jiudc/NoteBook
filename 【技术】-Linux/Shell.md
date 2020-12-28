@@ -77,3 +77,28 @@ export PS4='{$LINENO:${FUNCNAME[0]}}'
 
 ## BASHDB
 
+## 问题
+
+##### 新建用户使用Xshell方向键出现乱码
+
+原因：新建的用户默认的是使用dash，而不是我们常用的bash,只要修改一下用户登录的shell就行。
+
+命令：sudo usermod -s /bin/bash 用户名
+
+记得先获取sudo权限，也就是先加入sudo附加组。
+
+命令：sudo usermod -G sudo 用户名
+
+ ##### 配置ssh密码登录
+
+```shell
+# Firstly, modify 'PasswordAuthentication yes' in /etc/ssh/sshd_config*  
+# Secondly, run following command:* $ sudo systemctl restart sshd 
+# Thirdly, create a user*  
+$ sudo useradd -m -d /home/vagranttest -s /bin/bash vagranttest  
+$ echo -e "vagranttest\nvagranttest\n" | sudo passwd vagranttest 
+$ sudo chmod 777 -R /home/vagranttest/ 
+# give vagranttest user to sudo priviledge* 
+$ sudo usermod -aG wheel vagranttest 
+```
+
