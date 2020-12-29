@@ -214,7 +214,128 @@ G1避免全区域垃圾回收，把内存划分为独立的区域，跟踪区域
 
 ### JAVA IO包
 
+#### 字节流
 
+##### InputStream
+
+##### OutputStream
+
+#### 字符流
+
+##### Reader
+
+##### Writer
+
+### Java NIO
+
+NIOJ基于Channel和Buffer继续操作，数据总是从通道读取到缓冲区，或者从缓冲区写入到通道。
+
+NIO和传统IO第一个最大的区别是，IO是面向流的，NIO是面向缓冲区的。
+
+#### Channel
+
+Channel和IO中的Stream是差不多，只不过Stream是单向的，而Channel是双向的
+
+- FIleCHannel
+- DatagramChannel
+- SocketChannel
+- ServerSocketChannel
+
+#### Buffer
+
+缓冲区，实际是一个容器，是一个连续数组。Buffer是一个顶层父类，它是一个抽象类，常见的Buffer子类有：ByteBuffer、IntBuffer、CHarBuffer、LongBuffer、DoubleBuffer、FloatBuffer
+
+#### Selector
+
+能够检测多个注册的通道上是否有事件发生，如果有事件发生，便获取事件然后针对每个事件进行响应的响应处理。单个线程可以监听多个数据通道。
+
+## JVM类加载机制
+
+### 加载
+
+这个阶段在内存中生成代表这个类的java.lang.Class对象，作为方法区这个类的各种数据的入口。
+
+- Class文件
+- Zip包（jar包和war包）
+- 计算
+- 其他文件（JSP文件转换为对应的Class类）
+
+### 验证
+
+确保Class文件的字节流中包含的信息是否符合当前虚拟机的要求。
+
+### 准备
+
+准备阶段是正式为类变量分配内存并设置类变量的初始值阶段，即在方法区中分配这些变量所使用的内存空间。
+
+### 解析
+
+解析阶段是指虚拟机将常量池的符号引用替换为直接引用的过程。
+
+#### 符号引用
+
+符号引用与虚拟机实现的布局无关，引用的目标并不一定要已经加载到内存中。各种虚拟机实现的内存布局可以各不相同，但他们能接受的符号引用必须是一致的，因为符号引用的字面量形式明确定义在Java虚拟机规范的Class文件格式中。
+
+1. CONSTANT_Class_info
+2. CONSTANT_Field_info
+3. CONSTANT_Method_info
+
+#### 直接引用
+
+直接引用可以是指向目标的指针，偏移量或者一个能直接定位到目标的句柄。如果有了直接引用，那引用的目标必定已经在内存中存在。
+
+### 初始化
+
+前面的类加载阶段之后，除了在加载阶段可以自定义加载器以外，其他操作都由JVM主导。到初始阶段，才真正执行类中定义的Java程序代码。
+
+#### 类构造器<client>
+
+初始化阶段是执行类构造器<client>方法的过程。<client>方法是由编译器自动收集类中的类变量的赋值操作和静态语句块中的语句合并而成的。虚拟机会保证子client方法执行之前，父类的client方法已经执行完毕。如果一个类中没有对静态变量赋值也没有静态语句块，那么编译器可以不为这个类生成<client>（）方法
+
+以下几种情况不会执行类初始化：
+
+1. 通过子类引用父类的静态字段，只会触发父类的初始化，而不会触发子类的
+2. 定义对象数组
+3. 常量在编译器间会存入调用类的常量池中，本质上并没有直接引用定义常量的类，不会触发定义常量所在的类
+4. 通过类名获取Class对象
+5. 同故宫CLass.forName加载指定类时，如果制定参数initialize为false时，也不会触发类初始化
+6. 通过ClassLoader默认的loadClass方法
+
+### 类加载器
+
+虚拟机设计团队把加载动作放到JVM外部实现，一边让应用程序决定如何获取所需的类，JVM提供了三种类加载器：
+
+#### 启动类加载器（Bootstrap ClassLoader）
+
+负载加载JAVA_HOME\lib目录中的，或通过-Xbootclasspath参数指定目镜中
+
+#### 扩展类加载器（Extension ClassLoader）
+
+负责加载JAVA_HOME\lib\ext目录中的，或通过java.ext.dirs系统变量制定路径中类库
+
+#### 应用程序类加载器（Application ClassLoader）
+
+负责加载用户路径(classpath)上的类库
+
+JAVM通过双亲委派模型进行类的加载，我们也可以通过继承java.lang.ClassLoader实现自定义的类加载器
+
+自定义加载器=》应用程序类加载器=》扩展类加载器=》启动类加载器
+
+### 双亲委派
+
+当一个类收到了类加载亲贵，它首先不会尝试自己去加载这个类，而是把这个请求委派给父类完成。只有当父类加载器反馈自己无法完成这个请求（在它的加载路径下没有找到所需加载的Class），子类加载器才会尝试自己去加载。可以保证使用不同的类加载器最终得到的都是同样的一个对象。
+
+### OSGI（动态模型系统）
+
+Open Service Gataway Initiative，是面向Java的动态模型系统，是Java动态化模块系统的一系列规范。
+
+#### 动态改变构造
+
+OSGI服务平台提供在多种网络设备上无需重启的动态改造构造的功能。
+
+#### 模块化编程和热插拔
+
+OSGi旨在为实现Java程序的模块化编程提供基础条件，基于OSGi的程序很可能可有实现模块级的热插拔功能，当程序升级时，可以只停用、重新安装然后重启程序的其中一部分。
 
 ## 线程资源同步和交互机制
 
@@ -224,7 +345,183 @@ G1避免全区域垃圾回收，把内存划分为独立的区域，跟踪区域
 
 ### 线程状态及分析方法
 
-## 
+# JAVA集合
 
+## LIST
 
+### ArrayList
 
+内部通过数组实现，它允许对元素进行快速随机访问。数据的缺点是每个元素之间不能由间隔，当数组大小不满足是需要增加存储能力，就要将已经由数据的数据复制到新的存储空间中。当从ArrayList的中间位置插入或者删除数据时·，需要对数据进行复制、移动，代价比较高。它适合随机查找和遍历，不适合插入和删除。
+
+### Vector
+
+与ArrayList一样，通过数组实现，不同的是它支持线程的同步，访问速度比ArrayList慢
+
+### LinkList
+
+用链表结构存储数据，很适合数据的动态插入和删除。随机访问和遍历速度较慢。
+
+## Set
+
+值不能重复。
+
+### HashSet
+
+哈希表存放的是哈希值。HashSEt存储元素的顺序并不是按照存入是的顺序。元素的哈希值通过hashcode()方法来获取，HashSet首先判断两个元素的哈希值，如果哈希值一样，接着会比较equals方法，如果返回为true，HashSet视为同一个元素。
+
+哈希值相同equals为false的元素在同样的哈希值下顺延（哈希桶）。
+
+### TreeSet
+
+1. TreeSet()使用二叉树的原理对新add的对象按照制定的顺序拍寻，每增加一个对象都会进行排序，将对象插入二叉树指定的位置
+2. Integer和String对象都可以继续默认的TreeSet排序，而自定的对象必须实现Comparable接口
+3. 在覆写compare()函数时，要返回相应的值，小于、等于或大于，分别返回负整数、零或正整数
+
+### LinkHashSet（HashSet+LinkedHashMap）
+
+LinkHashSet底层使用LinkedHashMap来保存所有元素。
+
+## Map
+
+### HashMap（数组+链表+红黑树）
+
+HashMap根据hashCode值存储数据。最多只允许一条记录的键为null。HashMap非线程安全。
+
+### ConcurrentHashMap
+
+#### Segment段
+
+ConcurrentHashMap和HashMap思路差不多，支持并发。整个ConcurrentHashMap由一个个Segment组成，Segment代表部分或者一段，又称分段锁或者槽。
+
+#### 线程安全（继承ReentrantLock加载）
+
+ConcurrentHashMap是一个Segment数组，Segment通过继承ReentrantLock进行加载，所以每次需要加载的操作锁住一个segment，这样只要保证每个segment是线程安全的，就实现了全局的线程安全。
+
+#### 并行度（默认16）
+
+ConcurrentHashMap有16个segments，所以理论上，最多支持16个线程并发写。这个值在初始化可以设置为其他值，一旦初始化以后，他是不可以扩容的。
+
+### HashTable（线程安全）
+
+遗留类，与HashMap类似，线程安全，并发性不如ConcurrentHashMap。不建议在新代码中使用，不需要线程安全可以用HashMap替换，需要线程安全可以用ConcurrentHashMap替换。
+
+### TreeMap（可排序）
+
+TreeMap实现SortedMap接口，按照键值排序（默认升序）。当用Iterator遍历TreeMap时，得到的记录时排过序的。
+
+使用TreeMap时，key必须实现Comparable接口，或者在构造TreeMap传入自定义的Comparator
+
+### LinkedHashMap（记录插入顺序）
+
+是HashMap的一个子类，保存了记录的插入顺序，在用Iterator遍历时，先得到的记录时先插入的。
+
+# Java多线程并发
+
+## Java创建线程
+
+### 继承Thread类
+
+Thread类本质上是实现了Runnable接口的一个实例，代表一个线程的实例。启动线程唯一的方法就是通过Thread类的start()实例方法。start()是一个native方法。
+
+### 实现Runnable接口
+
+### ExecutorService、Callable<Class>、Future
+
+有返回值的任务必须实现Callable接口。执行Callable任务后，可以获取一个Future对象，在该对象上调用get就可以获取Callable任务返回的Object了。
+
+## 线程池
+
+Java线程池的顶级接口时Executor，严格意义上Executor并不是一个线程池，而只是一个执行线程的工具。真正线程池的接口时ExecutorService。
+
+### newCachedThreadPool
+
+创建一个可根据需要创建新线程的线程池，但是在以前构造的线程可用时重用他们。
+
+调用executor将重用以前构造的线程，如果现有的线程没有可用的，则创建一个新线程并添加到池中。终止并从缓存中移除哪些已有60秒钟未被使用的线程。长时间保持空闲的线程池不会使用任何资源。
+
+### newFixedThreadPool
+
+创建一个可重用的固定线程数的线程池，以共享的无界队列方式来运行这些线程。
+
+### newScheduledThreadPool
+
+创建一个线程池，它可安排在给定延迟后运行命令或定期地执行。
+
+### newSingleThreadExecutor
+
+Executors.newSingleThreadExecutor()返回一个线程池（只有一个线程），这个线程可以在线程死后重新启动一个线程代替原来地线程继续执行。
+
+## 线程的生命周期
+
+### 新建状态（NEW）
+
+当程序使用new创建一个线程后，该线程处于新建状态，仅由JVM为其分配内存，并初始化其成员变量的值
+
+### 就绪状态（RUNNABLE）
+
+调用start()方法之后，该线程就处于就绪状态。Java虚拟机会为其创建方法调用栈和程序计数器，等待调度运行。
+
+### 运行状态（RUNNING）
+
+如果处于就绪状态的线程获得CPU，开始执行run()方法的线程执行体
+
+### 阻塞状态（BlOCKED）
+
+#### 等待阻塞
+
+运行的线程中执行o.wait()方法，JVM会把该线程放入等待队列
+
+#### 同步阻塞
+
+运行的线程获取对象的同步锁时，若该同步锁被别的线程占用，则JVM会把该线程放入锁池（lock pool）中
+
+#### 其他阻塞
+
+运行的线程执行Thread.sleep(long ms)或t.join()，或者发出了IO请求，JVM会把该线程置为阻塞状态。
+
+当sleep状态超时、join等待线程终止或者超时、IO处理完毕，线程重新转入可运行状态
+
+### 线程死亡
+
+#### 正常结束
+
+run()或call()方法执行完成，线程正常结束
+
+#### 异常结束
+
+线程抛出一个未捕获的Exception或Error
+
+#### 调用stop
+
+直接调用线程的stop方法来结束该线程，容易导致死锁。
+
+## 线程终止方式
+
+### 正常运行结束
+
+程序运行结束
+
+### 使用退出标志退出线程
+
+一般run()方法执行完，线程就会正常结束，而有些线程是四幅线程。他们需要长时间的运行，自由在外部某些条件满足的情况下，才能关闭这些线程。使用一个变量来控制循环，最直接就是设置一个boolean，通过这个标志来控制while是否退出循环。
+
+### Interrupt方法结束线程
+
+#### 线程处于阻塞
+
+当调用线程的interrupt()方法时，会抛出InterruptException异常。阻塞中的那个方法抛出这个异常，通过代码捕获该异常，然后break跳出循环状态。一定要先捕获InterruptedException异常之后通过break来跳出循环，才能正常结束run方法。
+
+#### 线程未处于阻塞状态
+
+使用isInterrupted()判断线程的终端标志来退出循环。当使用interrupt方法时，中断标志就会置true
+
+### stop方法终止线程（线程不安全）
+
+thread.stop()调用之后，创建子线程的线程就会抛出ThreadDeatherror的错误，并且会释放子线程所持有的所有锁。加载的代码是为了保证数据的一致性，若突然释放（不可控制），那么被保护的数据就可能出现不一致性，其他线程在使用这些被破环的数据时，可能会出现奇怪的应用程序错误。
+
+## sleep和wait区别
+
+1. sleep属于Thread，而wait属于Object类
+2. sleep导致线程暂停执行指定的时间，让出cpu，但监控状态依然保持着
+3. 调用sleep线程不会释放对象锁
+4. wait线程会放弃对象锁，进入等待此对象的等待锁定池
