@@ -562,3 +562,70 @@ Java中的乐观锁基本都是通过CAS操作实现的，CAS是一种更新的�
 
 #### 自旋锁的优缺点
 
+ 自旋锁对于锁竞争不激烈，且占用锁时间非常短的代码块来说性能能大幅度提升，因为自旋的消耗会小于线程阻塞挂起在唤醒的操作的消耗，这些操作会导致线程发生两次上下文切换。
+
+如果锁竞争激烈或者持有锁的线程长时间占用锁执行同步块，这时候就不适合使用自旋锁。
+
+#### 自旋锁时间阈值
+
+在1.6引入适应性自旋锁，适应性自旋锁意味着自旋的时间不是固定的，而是由前一次在同一个锁上自旋时间以及锁的拥有者的状态来决定。基本认为一个线程上下文切换的时间是最佳的一个时间。
+
+### Synchronized同步锁
+
+属于独占式的悲观锁，同时属于可重入锁。
+
+1. 作用于方法时，锁着的是对象的实例（this）
+2. 作用于静态方法时，锁着的是Class实例，由因为Class数据存储在永久代中，是全局共享的，因此静态方法锁相当于类的一个全局锁，会锁所有调用该方法的线程
+3. synchronized作用一个对象实例时，锁住的时所有以对象为锁的代码块。
+
+#### Synchronized核心组件
+
+1. Wait Set：那些调用wait方法被阻塞的线程
+2. Contention List：竞争队列，所有请求锁的线程首先被放在这个竞争队列中
+3. Entry List：Contention List中那些由资格成为候选资源的线程被移动到Entry List中
+4. OnDeck：任意时刻，最多只有一个线程正在竞争锁资源
+5. Owner：当前已经获取到锁资源的线程称为Owner
+6. ！Owner：当前释放锁的线程
+
+#### Synchronized实现
+
+##### monitorenter
+
+1. 如果monitor进入数为0，则线程进入monitor，进入数设置为1，线程为monitor的所有者
+2. 如果线程已经占有monitor，则进入数据+1
+3. 若其他线程已经占用，则线程进入阻塞
+
+##### monitorexit
+
+执行monitorexit的进程必须时monitor的所有者
+
+指令执行时，monitor进入数减1，如果减1进入数为0，那么线程退出monitor
+
+##### 锁竞争过程
+
+1. JVM每次从WaitingQueue的尾部取出一个数据用于锁竞争候选者（OnDeck），但是并发情况下ContentionList会被大量并发的线程进行CAS访问，为减低对尾部元素的竞争，JVM会将一部分线程移动到EntryList中作为候选竞争线程
+2. Owner线程会在unlock时，将ContentionList的部分线程迁移到EntryList，并指定EntryList作为候选竞争线程
+3. Owner线程并不直接把锁传递为OnDeck线程，而是把竞争的权力交给OnDeck，与自旋等竞争
+4. OnDeck获取锁进程就会变为Owner线程，而没有得到所资源仍然停留在EntryList中
+5. 若Owner线程被wait方法阻塞，则转移到WaitSet中，直到某个时刻通过notify或notifyAll唤醒，会重新进入EntryList
+6. Synchronize是非公平锁。Synchronized在线程进入ContentionList时，等待的线程会先尝试自旋获取锁，获取不到就进入ContentionList，这明显对于已经进入队列的线程时不公平的，还有自旋获取锁的线程还可能直接抢占OnDeck线程的锁资源
+7. 每个对象都有一个monitor对象，加锁就是在竞争monitor对象
+8. synchronized时一个重量级操作，需要调用操作系统相关接口，性能时低效的，有可能给线程加锁消耗的时间比有用操作消耗的时间更多
+9. Java1.6对synchronized进行了很多优化，适应自旋、锁消除、锁粗化、轻量级锁及偏向锁。
+10. 锁可以从偏向锁升级到轻量级锁，在升级到重量级锁，这种升级过程叫做锁膨胀
+11. JDK1.6默认开启偏向锁和轻量级锁，可通过-XX：-UseBiasedLocking来禁用偏向锁
+
+### ReentrantLock
+
+ReentrantLock继承接口Lock，时一种可重入锁，除了能完成synchronized所能完成的所有工作外，还提供了可响应中断锁、可轮询锁请求、定时锁等避免多线程锁死的方法
+
+#### Lock接口主要方法
+
+1. void lock()：执行此方法时，如果锁处于空闲状态，当前那线程将获取到锁。如果锁已经被其他线程， 将禁用当前线程，知道当前线程获取到锁
+2. boolean tryLock()：如果锁可用，则获取锁，并立即返回true，否则false
+3. void unlock():当前线程将释放持有的锁，锁只能由持有者释放，否则可能导致异常
+4. Condition newCondition()：条件对象，获取等待通知组件。该组件和当前的锁半丁，当前线程只有获取了锁，才能调用该组件的await()方法，而调用后，当前线程将释放锁
+5. getHoldCount():查询当前线程保持此锁的次数， 也就是执行lock的次数
+6. getQueueLength():返回正等待获取此锁的线程估计数
+7. getWaitQueueLenght：返回等待与此锁相关条件的线程估计数
+8. hasWaiters：
