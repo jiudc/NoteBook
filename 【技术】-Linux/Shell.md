@@ -57,7 +57,7 @@ DEBUG(){
 -x模式：前面有+号的是shell脚本实际执行的命令，前面有++号的行是执行trap机制中指定的命令，其他的行则是输出信息。
 
 ```shell
-set -x #开启-x
+  set -x #开启-x
 set +x #关闭-x
 DEBUG set -x
 DEBUG set +x
