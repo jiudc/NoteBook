@@ -19,7 +19,7 @@
 - @exception
 - @throws 
 
-​	Javadoc默认不会提取@author、@version
+​    Javadoc默认不会提取@author、@version
 
 ## 数据类型
 
@@ -73,12 +73,12 @@
 
 ## 数组
 
-​	不要同时指定长度和分配初始值。数组需要初始化后才能使用，初始化即分配内存空间，并为每个数组元素指定初始值。
+​    不要同时指定长度和分配初始值。数组需要初始化后才能使用，初始化即分配内存空间，并为每个数组元素指定初始值。
 
--  静态初始化，程序员指定元素，系统决定系统长度
+- 静态初始化，程序员指定元素，系统决定系统长度
 - 动态初始化，程序员指定长度，系统分配初始值
 
-​	两种不要混合使用。
+​    两种不要混合使用。
 
 1. 整数型：int,long,short,byte，初始值为0
 2. 浮点型：float,double，初始值为0.0
@@ -108,11 +108,11 @@ for（type var: array）{
 
 ### 初始化
 
-​	初始化多维数组的时候需要指定最左边维的大小
+​    初始化多维数组的时候需要指定最左边维的大小
 
 ### Array
 
-​	二分查找需要数组按照升序排列
+​    二分查找需要数组按照升序排列
 
 - Int binarySearch（type[] a,type key）
 - Int binarySearch(type[] a,int fromIndex,int toIndex,type key)
@@ -138,7 +138,7 @@ JAVA 8增强了Arrays类的功能
 - XxxStream stream(xxx[] array)
 - XxxStream stream(xxx[] array,int startInclusive,int endExclusive)
 
-​	把char型数字转换成int型数字，因为他们的ASCII码值恰好相差48:
+​    把char型数字转换成int型数字，因为他们的ASCII码值恰好相差48:
 
 ```java
 Int num = numstr.charAt(i) - 48
@@ -150,16 +150,16 @@ Int num = numstr.charAt(i) - 48
 2. 从逻辑意义上来看，方法要么属于类，要么属于内的对象
 3. 永远不能独立执行方法，执行方法必须使用类或者对象，this
 
-​	Java中方法都是按值传递。定义形参可变的方法，public static void test(int v1,string … v2)
+​    Java中方法都是按值传递。定义形参可变的方法，public static void test(int v1,string … v2)
 
 ## 对象和内存控制
 
-​	This总是指向调用该对象的对象。有两种情况：
+​    This总是指向调用该对象的对象。有两种情况：
 
 - 构造器中引 用该构造器正在初始化的对象
 - 在方法中引用调用该方法的对象
 
-​	新建一个对象，person p1 = new person()。首先会在堆中生成person类的空间，初始化static变量，后面才是分配对象
+​    新建一个对象，person p1 = new person()。首先会在堆中生成person类的空间，初始化static变量，后面才是分配对象
 
 内存管理分为：
 
@@ -215,15 +215,15 @@ Javap –c x.class反编译
 
 ### 父类构造器
 
-​	当调用某个类的构造器创建Java对象时，系统会优先调用父类的非静态初始块，再调用父类的构造器。
+​    当调用某个类的构造器创建Java对象时，系统会优先调用父类的非静态初始块，再调用父类的构造器。
 
-​	This代表正在初始化的JAVA对象。当变量的编译和运行的类型不同时，通过该变量访问它引用的对象的实例对象时，该实例对象的值由申明该变量的类型决定；通过该变量调用它引用的对象的实例方法时，该方法的行为由它实际所引用的对象来决定。
+​    This代表正在初始化的JAVA对象。当变量的编译和运行的类型不同时，通过该变量访问它引用的对象的实例对象时，该实例对象的值由申明该变量的类型决定；通过该变量调用它引用的对象的实例方法时，该方法的行为由它实际所引用的对象来决定。
 
 ### 父子实例的内存控制
 
-​	针对成员方法，编译器会**将父类的方法直接转移到子类**中，因此若子类重写，则会完全覆盖父类的函数。而针对成员变量，则不会出现该现象。两个变量依然存在。
+​    针对成员方法，编译器会**将父类的方法直接转移到子类**中，因此若子类重写，则会完全覆盖父类的函数。而针对成员变量，则不会出现该现象。两个变量依然存在。
 
-​	Java程序允许某个方法通过return this返回该方法的JAVA对象，但不允许直接return super，甚至不允许直接将super当成一个引用变量使用。
+​    Java程序允许某个方法通过return this返回该方法的JAVA对象，但不允许直接return super，甚至不允许直接将super当成一个引用变量使用。
 
 ### Final修饰符
 
@@ -231,13 +231,13 @@ Javap –c x.class反编译
 - Final可修饰方法，被final修饰的方法不能被重写
 - Final可修饰类，不能派生类
 
-​	Final修饰的变量必须现实指定初始值，而只能在如下三个位置指定：
+​    Final修饰的变量必须现实指定初始值，而只能在如下三个位置指定：
 
 1. 定义final实例对象的时候指定初始值
 2. 在非静态初始化块中
-3.  构造器中
+3. 构造器中
 
-​	Final修饰的类变量，同样必须显示指定
+​    Final修饰的类变量，同样必须显示指定
 
 1. 定义final类变量时
 2. 静态初始化块中
@@ -245,7 +245,7 @@ Javap –c x.class反编译
 
 ### 字符串缓冲池
 
-​	Java会缓冲曾经用过的字符串。
+​    Java会缓冲曾经用过的字符串。
 
 ## 代码块
 
@@ -270,7 +270,7 @@ Javap –c x.class反编译
 
 ## 多态Polymorphism
 
-​	Instanceof运算符的前一个操作数通常是一个引用类型变量，后面一个操作数通常是一个类。用于判断前面的对象是否是后面的类，后者其子类、实现类的实例。Instanceof运算符前面的操作数要么与后面的类相同，要么与后面的类具有父子继承关系，否则会引起编译错误。
+​    Instanceof运算符的前一个操作数通常是一个引用类型变量，后面一个操作数通常是一个类。用于判断前面的对象是否是后面的类，后者其子类、实现类的实例。Instanceof运算符前面的操作数要么与后面的类相同，要么与后面的类具有父子继承关系，否则会引起编译错误。
 
 ## Java增强包
 
@@ -281,7 +281,7 @@ Javap –c x.class反编译
 
 ## Equals
 
-​	正确重写equals()方法应该满足一下条件：
+​    正确重写equals()方法应该满足一下条件：
 
 1. 自反性
 2. 对称性
@@ -291,36 +291,36 @@ Javap –c x.class反编译
 
 ## 单例类（Singleton）
 
-​	如果一个类始终只能创建一个实例，这个类成为单例类。将构造器用private修饰。一旦把构造器隐藏起来，就需要提供一个public方法作为该类的访问点，用于创建该类的对象，且该方法必须使用static修饰。此外，还需要缓存已创建的对象，因此需要为该类使用一个成员变量保存，需用static修饰。
+​    如果一个类始终只能创建一个实例，这个类成为单例类。将构造器用private修饰。一旦把构造器隐藏起来，就需要提供一个public方法作为该类的访问点，用于创建该类的对象，且该方法必须使用static修饰。此外，还需要缓存已创建的对象，因此需要为该类使用一个成员变量保存，需用static修饰。
 
 ## 不可变类
 
-​	Java提供的8个包装类和java.lang.String类都是不可变类。创建实例后，其实例变量不可变。
+​    Java提供的8个包装类和java.lang.String类都是不可变类。创建实例后，其实例变量不可变。
 
 1. 使用private和final修饰符来修饰该类的成员变量
 2. 提供带参数构造器，用于根据传入的参数来初始化成员变量
 3. 仅为该类的成员变量提供getter方法，不要为该类的成员变量提供setter方法
 4. 如果有必要，重写Object类的hashcode()和equals()方法
 
-​	设计的时候需要考虑到如果是引用型成员变量，需要采取一些措施实现不可变类。如改写设置引用变量的方法，也改变此变量的getter方法。
+​    设计的时候需要考虑到如果是引用型成员变量，需要采取一些措施实现不可变类。如改写设置引用变量的方法，也改变此变量的getter方法。
 
 ### 缓存实例的不可变类
 
-​	使用数组实现缓存
+​    使用数组实现缓存
 
 ## 抽象类
 
-​	抽象类和方法必须使用abstract修饰符来定义，有抽象方法的类只能被定义成抽象类，抽象类里没有抽象方法。
+​    抽象类和方法必须使用abstract修饰符来定义，有抽象方法的类只能被定义成抽象类，抽象类里没有抽象方法。
 
 1. 抽象类和方法必须使用abstract修饰，抽象方法不能有方法体
 2. 抽象类不能被实例化，无法使用new来调用构造函数
 3. 抽象类可以包括成员变量、方法（普通和抽象）、构造器、初始化块、内部类（接口、枚举）
 
-​	Final和abstract不能同时使用。Static和abstract不能同时修饰某个方法。
+​    Final和abstract不能同时使用。Static和abstract不能同时修饰某个方法。
 
 ## 内部类
 
-​	内部类作用：
+​    内部类作用：
 
 - 内部类提供了更好的封装，可以把内部类隐藏在外部类之内，不允许同一个包中的其他类访问。
 - 内部类可以访问外部类的私有数据。
@@ -330,7 +330,7 @@ Javap –c x.class反编译
 
 ### 静态内部类
 
-​	归属于类
+​    归属于类
 
 ### 局部内部类
 
@@ -338,7 +338,7 @@ Javap –c x.class反编译
 
 ### Java8改进的匿名内部类
 
-​	匿名内部类继承一个父类或实现一个接口（interfaceimp）。匿名内部类定义时会直接创建一个实例后该类定义消失。
+​    匿名内部类继承一个父类或实现一个接口（interfaceimp）。匿名内部类定义时会直接创建一个实例后该类定义消失。
 
 - 匿名内部类不能定义成抽象类
 - 匿名内部类中不能定义构造函数
@@ -346,13 +346,13 @@ Javap –c x.class反编译
 
 ### Java8新增的Lambda表达式
 
-​	Lambda表达式支持将代码块作为方法参数，Lambda表达式允许使用更简洁的代码创建只有一个抽象方法的接口。
+​    Lambda表达式支持将代码块作为方法参数，Lambda表达式允许使用更简洁的代码创建只有一个抽象方法的接口。
 
 (形参)->{代码块}
 
-​	若代码块只有一行，可以省略花括号；若此时要求返回，可以省略rerun。还可以使用方法引用和构造器引用。Lambda表达式的类型，也称为目标类型，必须是函数式接口。函数式接口代表只能包含一个抽象方法的接口。
+​    若代码块只有一行，可以省略花括号；若此时要求返回，可以省略rerun。还可以使用方法引用和构造器引用。Lambda表达式的类型，也称为目标类型，必须是函数式接口。函数式接口代表只能包含一个抽象方法的接口。
 
-​	JAVA8提供了@FunctionalInterface，告诉编译器检查该接口必须是函数式接口。因为Lambda表达式接口被当成对象，可以用来赋值。Runnable r = Lambda；Runnable是一个函数式接口。两者参数要一致。
+​    JAVA8提供了@FunctionalInterface，告诉编译器检查该接口必须是函数式接口。因为Lambda表达式接口被当成对象，可以用来赋值。Runnable r = Lambda；Runnable是一个函数式接口。两者参数要一致。
 
 1. 将Lambda表达式赋值给函数式接口类型的变量
 2. 将Lambda表达式作为函数式接口类型的参数传给某个方法
@@ -360,7 +360,7 @@ Javap –c x.class反编译
 
 可以使用方法引用替换Lambda表达式，如：
 
--  Converter c1 = s->Integer.valueOf(s);
+- Converter c1 = s->Integer.valueOf(s);
 - Converter c1 = Integer::vauleOf;
 
 引用特定对象
@@ -397,7 +397,7 @@ Javap –c x.class反编译
 
 ## 对象与垃圾回收
 
-​	垃圾回收之前都会调用finalize(),可使对象重新复活
+​    垃圾回收之前都会调用finalize(),可使对象重新复活
 
 对象在内存中的状态：
 
@@ -421,7 +421,7 @@ finalize()定义在Object类的实例方法
 
 ## 对象的软、弱和虚引用
 
-​	Java.lang.ref包下提供三个类，SoftReference、PhantomReference和WeakReference，分别表示软引用，虚引用和弱引用。
+​    Java.lang.ref包下提供三个类，SoftReference、PhantomReference和WeakReference，分别表示软引用，虚引用和弱引用。
 
 ## JAR包
 
@@ -445,7 +445,7 @@ finalize()定义在Object类的实例方法
 
 ## 常用类
 
-###  String
+### String
 
  两种实例化：
 
@@ -477,7 +477,7 @@ String str = new String(“hello”); \\可使用intern()方法入池
 
 ### Runtime
 
-​	Runtime表示运行操作类，是一个封装了JVM进程的类。构造方法私有化，属于单例设计。
+​    Runtime表示运行操作类，是一个封装了JVM进程的类。构造方法私有化，属于单例设计。
 
 - public long freeMemory()\maxMemory()
 - public void gc()
@@ -488,14 +488,14 @@ Runtime rt = Runtime.getRuntime();
 Rt.exec(“notepad.exe”)
 ```
 
-​	可使用Process提供的destory关闭该任务
+​    可使用Process提供的destory关闭该任务
 
 ```java
 Runtime runtime = Runtime.*getRuntime*();
 System.***out\***.println(runtime.freeMemory());
 Process process = **null**;
 try {
- 	process = runtime.exec("notepad.exe");
+     process = runtime.exec("notepad.exe");
    } catch (Exception e) {
  // **TODO**: handle exception
  }
@@ -533,7 +533,7 @@ try {
 
 ### BigDecimal
 
-​	构建时不要使用double来构建，会造成精度丢失
+​    构建时不要使用double来构建，会造成精度丢失
 
 - BigDecimal f1 = new Bigdecimal(“0.05”);
 - BigDecimal f2 = new BigDecimal.valuesOf(0.01);
@@ -541,30 +541,37 @@ try {
 ### Date
 
 - date(),creat date object use current time
+
 - date(long date)
+
 - after()\before()\compareTo()
+
 - ouput with format:Data date = new Date();
-	         String day = String.format(“%te”,date);
-	- %te,一个月的某一天
-	- %tb,指定语言的月份简称
-	- %tB,全称
-	- %tA,星期几全称
-	- %ta，星期几简称
-	- %tc，全部日期和时间信息
-	- %tY，4位年份
-	- %tj，一年的第几天
-	- %tm：月份
-	- %td：一个月的第几天
-	- %ty：二位年份
-	- %tH：hous in 24
-	- %tM：minute
-	- %tS：second
-	- %tF：2018-05-06
-	- %tD：05/06/18
-	- %tr:11:01:01 pm
-	- %tT:23:01:01
-	- %tR:23:01
+  
+             String day = String.format(“%te”,date);
+  
+  - %te,一个月的某一天
+  - %tb,指定语言的月份简称
+  - %tB,全称
+  - %tA,星期几全称
+  - %ta，星期几简称
+  - %tc，全部日期和时间信息
+  - %tY，4位年份
+  - %tj，一年的第几天
+  - %tm：月份
+  - %td：一个月的第几天
+  - %ty：二位年份
+  - %tH：hous in 24
+  - %tM：minute
+  - %tS：second
+  - %tF：2018-05-06
+  - %tD：05/06/18
+  - %tr:11:01:01 pm
+  - %tT:23:01:01
+  - %tR:23:01
+
 - public void setTime(long time)
+
 - public long getTime()
 
 ### Calendar
@@ -577,7 +584,7 @@ try {
 
 ### DateFormat
 
-​	DateFormat是一个抽象类
+​    DateFormat是一个抽象类
 
 - public static final DateFromat getDateInstance();//日期
 - public static final DateFromat getDateInstance(int style, Locale aLocale);//根据Locale得到
@@ -607,14 +614,22 @@ Date d = sd.parse(“2018-5-10 16:45:17.123”);
 ### Math
 
 - sin(double a)\cos\tan\asin\acos\atan
+
 - toRadians(double angdeg):change to radian
+
 - toDegrees(double angrad)
+
 - exp\log\log10\sqrt\cbrt\pow
+
 - ceil(>=current smallest interger)\floor\rint(nearst,default even)\round
+
 - max\min\abs
+
 - random:0.00~1.00(Math.random())
+
 - Random:Random r = new Random(seedValue);
-	     nextInt()\netInt(int n)(0~n)\nextLong\nextBoolean\nextFloat\nextDouble\nextGaussian
+  
+         nextInt()\netInt(int n)(0~n)\nextLong\nextBoolean\nextFloat\nextDouble\nextGaussian
 
 ### BegInteger
 
@@ -649,7 +664,7 @@ RoundingMode中的舍入方式：
 
 protected Object clone() throws CloneNotSupportedException
 
-​	必须要实现Cloneable接口，需要复写此方法，只能在方法中调用父类的clone()方法。
+​    必须要实现Cloneable接口，需要复写此方法，只能在方法中调用父类的clone()方法。
 
 ### Arrays类
 
@@ -658,11 +673,11 @@ protected Object clone() throws CloneNotSupportedException
 
 ### Comparable接口
 
-​	需要实现Comparable接口，复写compareTo方法，才能使用java.util.Arrays.sort(对象数组)进行排序，若没有实现则会报错，ClassCaseException，因为在排序时，所有对象都向Comparable进行转换。
+​    需要实现Comparable接口，复写compareTo方法，才能使用java.util.Arrays.sort(对象数组)进行排序，若没有实现则会报错，ClassCaseException，因为在排序时，所有对象都向Comparable进行转换。
 
 ### Comparator
 
-​	如果一个类已经开发完成，但建立初期没有实现comparable接口，此时无法排序，个Compator,在java.util包下。此时需要指定好一个比较器的比较规则类才可以完成数组排序。
+​    如果一个类已经开发完成，但建立初期没有实现comparable接口，此时无法排序，个Compator,在java.util包下。此时需要指定好一个比较器的比较规则类才可以完成数组排序。
 
 eg：
 
@@ -684,14 +699,14 @@ public class StudentComparator implements Comparator<Student>{
 
 ```java
 Date date = new Date();
-		Timestamp CUR_time = new Timestamp(date.getTime());
+        Timestamp CUR_time = new Timestamp(date.getTime());
 ```
 
 ## 定时调度
 
 ### Timer类
 
-​	Timer类是一种线程设施，可实现在某一段时间或某一段时间后安排某一个任务执行一次或者定期重复执行。需与TimeTask配合。
+​    Timer类是一种线程设施，可实现在某一段时间或某一段时间后安排某一个任务执行一次或者定期重复执行。需与TimeTask配合。
 
 - public Timer()-启动
 - public void cancel()-终止，放弃已安排的任务，对正在执行的任务没有影响
@@ -725,7 +740,7 @@ t.schedule(mytask,1000,2000);
 3. String replaceFirst()
 4. String[] split(String regex)
 
-​	正则表达式所支持的合法字符，x 字符x，可代表任何合法字符
+​    正则表达式所支持的合法字符，x 字符x，可代表任何合法字符
 
 - $匹配一行的结尾
 - ^匹配一行的开头
@@ -763,7 +778,7 @@ Matcher类的常用方法
 - public String replaceAll(String replacement)
 
 ```java
- 	String string = "1990-10-28";
+     String string = "1990-10-28";
     Pattern pattern = Pattern.*compile*("-");
     Matcher matcher = pattern.matcher(string);
     System.***out\***.println(matcher.matches());
@@ -783,9 +798,9 @@ Matcher类的常用方法
 
 ## 集合
 
-​	当使用Iterator迭代访问Collection集合元素时，元素不能改变，只有通过Interator的remove方法删除上一次next方法返回的集合元素才可以。
+​    当使用Iterator迭代访问Collection集合元素时，元素不能改变，只有通过Interator的remove方法删除上一次next方法返回的集合元素才可以。
 
-​	Interator迭代器采用的快速失败机制，一旦迭代过程中检测到该集合已经被修改，程序立即引发ConcurrentModificationException，而不是现实修改后的结果。
+​    Interator迭代器采用的快速失败机制，一旦迭代过程中检测到该集合已经被修改，程序立即引发ConcurrentModificationException，而不是现实修改后的结果。
 
 可使用如下删除：
 
@@ -800,15 +815,15 @@ While(it.hasNext){
 Collection
 
 - Set
-	- HashSet
-	- TreeSet
+  - HashSet
+  - TreeSet
 - List
-	- LinkedList
-	- ArrayList
+  - LinkedList
+  - ArrayList
 - Queue
 - Map
-	- HashMap
-	- TreeMap
+  - HashMap
+  - TreeMap
 
 ### Collection
 
@@ -833,7 +848,7 @@ Collection
 
 - put\containKey\containValue\get\keySet\values
 
-###  Java8新增的Predicate操作集合
+### Java8新增的Predicate操作集合
 
 Java8为Collection集合新增removeIf(Predicate filter)方法，Predicate也是函数式接口，可以使用Lambda作为参数。
 
@@ -851,7 +866,7 @@ Empty()/peek()/pop()/push()/search()
 
 GetProperty()/setProperty()/list()/load()/loadFromXML/store()/storeToXML()
 
-###  运算
+### 运算
 
 - 并集：list.addAll(list2)
 - 交集：list.retainAll(list2)
@@ -867,11 +882,10 @@ GetProperty()/setProperty()/list()/load()/loadFromXML/store()/storeToXML()
 
 ## 泛型
 
-​	允许在定义类、接口、方法时使用类型形参。不管泛型的类型形参传入哪一种类型实参，对于Java来说，依然被当成一个类处理，因而静态方法、静态初始化块或静态变量的申明和初始化都不允许使用类型形参。
+​    允许在定义类、接口、方法时使用类型形参。不管泛型的类型形参传入哪一种类型实参，对于Java来说，依然被当成一个类处理，因而静态方法、静态初始化块或静态变量的申明和初始化都不允许使用类型形参。
 
 - 受限泛型通配符：list<?extends Shape>
 - 下限通配符<? Super Type>
-
 1. 对于泛型如果实例化时不指定，则擦除泛型，使用Object表示，出现警告
 2. 使用通配符？可使用任意的泛型对象，但如果使用？接受泛型对象，则不能设置被泛型指定的内容
 3. 子类的泛型是无法使用父类的泛型，如Info<String>不能使用Info<Object>接收
@@ -879,35 +893,35 @@ GetProperty()/setProperty()/list()/load()/loadFromXML/store()/storeToXML()
 
 ### 泛型方法与通配符区别
 
-​	类型通配符既可以在方法签名中定义形参的类型，也可以用于定义变量的类型；但泛型的类型形参必须在对应方法中显式申明。
+​    类型通配符既可以在方法签名中定义形参的类型，也可以用于定义变量的类型；但泛型的类型形参必须在对应方法中显式申明。
 
 ### 泛型接口
 
-​	两种实现方式：
+​    两种实现方式：
 
 1. 在子类的定义上声明泛型类型
-
-	```java
-	 interface Info<T>;
-	 class InfoImp<T> implements Info<T>;
-	 Info<String> I = new InfoImp<String>(“LDC”);
-	```
+   
+   ```java
+    interface Info<T>;
+    class InfoImp<T> implements Info<T>;
+    Info<String> I = new InfoImp<String>(“LDC”);
+   ```
 
 2. 直接在接口中指定泛型
-
-	```java
-	 interface Info<T>;
-	 class InfoImp implements Info<String>;
-	 Info<String> I = new InfoImp(“LDC”);
-	```
+   
+   ```java
+    interface Info<T>;
+    class InfoImp implements Info<String>;
+    Info<String> I = new InfoImp(“LDC”);
+   ```
 
 ### 泛型数组
 
-​	使用泛型方法时，传递或者返回一个泛型数组：public static <T> T[] fun(T parm[])
+​    使用泛型方法时，传递或者返回一个泛型数组：public static <T> T[] fun(T parm[])
 
 ## 国际化程序
 
-​	国际化需要依托，java.util.Locale,表示一个国家语言类
+​    国际化需要依托，java.util.Locale,表示一个国家语言类
 
 - java.util.ResourceBundle：用于访问资源文件
 - java.text.MessageFormat:格式化资源文件的占位字符串
@@ -951,7 +965,7 @@ zhfr.getString(“info”);
 
 ### MessageFormat处理动态文本
 
-​	Fromat中派生MessageFormat、DateFormat、NumberFormat。info=hello,{0}!,用占位符表示。读取后需要使用MessageFormat处理，主要使用一下方法：
+​    Fromat中派生MessageFormat、DateFormat、NumberFormat。info=hello,{0}!,用占位符表示。读取后需要使用MessageFormat处理，主要使用一下方法：
 
 ```java
 public static String format(String pattern, Object … argument)
@@ -988,13 +1002,13 @@ MessageFormat.format(stren,”LDC”)
 
 ### finally
 
-​	异常处理代码中使用return不会退出finally语句，而System.exit(1)语句退出虚拟机则会。不要在finally块中使用如return或throw等导致方法终止的语句。
+​    异常处理代码中使用return不会退出finally语句，而System.exit(1)语句退出虚拟机则会。不要在finally块中使用如return或throw等导致方法终止的语句。
 
 ### Java7的自动关闭资源的try语句
 
-​	Try关键字后面紧跟圆括号，声明、初始化一个或多个资源，此处的资源是指那些在程序结束时显式关闭的资源（如数据库连接、网络连接等）。Try语句会在该语句结束时自动关闭这些资源。
+​    Try关键字后面紧跟圆括号，声明、初始化一个或多个资源，此处的资源是指那些在程序结束时显式关闭的资源（如数据库连接、网络连接等）。Try语句会在该语句结束时自动关闭这些资源。
 
-​	为保证try可以正常关闭资源，这些资源必须实现AutoCloseable或Closeable接口，实现close()方法。
+​    为保证try可以正常关闭资源，这些资源必须实现AutoCloseable或Closeable接口，实现close()方法。
 
 ## 断言
 
@@ -1006,7 +1020,7 @@ java –ea Test
 
 ### AWT容器
 
-​	Container是Component的子类。AWT主要提供两种主要的容器类型。
+​    Container是Component的子类。AWT主要提供两种主要的容器类型。
 
 - Window：可独立存在的顶级窗口
 - Panel：可作为容器容纳其他组件，不能独立存在，必须被添加到其他容器中
@@ -1052,7 +1066,7 @@ java –ea Test
 ```java
 Public @interface MyDefaultAnnotationMoreParm{
      Public String key() default “”;    
-	 Public String value();
+     Public String value();
 }
 @MyDefaultAnnotationMoreParm(key = “”, value = “”)
 Public @interface MyDefaultAnnotationArrayParm{
@@ -1119,9 +1133,10 @@ Public @interface AnnotationName{}
 推荐使用第一种，原因：
 
 1. Thread仅支持单继承
-2. 创建大量的Thread类，开销较大
-3. 5.0中新增的很多简化线程的类是使用Runnable接口的
 
+2. 创建大量的Thread类，开销较大
+
+3. 5.0中新增的很多简化线程的类是使用Runnable接口的
 - Start-就绪-阻塞-运行-终止
 
 不能直接使用run()启动进程，需要使用Thread类的start()启动，实际是调用
@@ -1151,7 +1166,6 @@ Runnable:
 - BLOCKED-得到和等待锁
 - TIMED_WATTING-休眠状态-sleep()
 - WATTING-等待状态-wait()
-
 1. Thread(Runnable target)
 2. Thread(Runnable target, String name)
 3. public static Thread currentThread()
@@ -1193,7 +1207,6 @@ Runnable:
 3. Volatile:notify JVM the para may be modify,need be checked
 4. ReentrantLock(可重入锁):Java.util.concurrent-ReentrantLock()\lock()\unlock()
 
-
 ```java
   lock.lock()
   try{}
@@ -1223,18 +1236,19 @@ public interface Callable<V> {
 ### Sychronized
 
 - 同步代码块
-
-	```java
-	synchronized(同步对象){
-	    需要同步的代码；
-	}
-	```
+  
+  ```java
+  synchronized(同步对象){
+      需要同步的代码；
+  }
+  ```
 
 - 同步方法
-	- 死锁
-	- wait()
-	- notify()-唤醒第一个等待的线程
-	- notifyAll()-唤醒所有等待的线程
+  
+  - 死锁
+  - wait()
+  - notify()-唤醒第一个等待的线程
+  - notifyAll()-唤醒所有等待的线程
 
 ## 类加载机制与反射
 
@@ -1257,13 +1271,13 @@ Class的常用方法：forName()/getConstructors()/getDeclaredFields()(单独定
 ### 构造类的实例化对象
 
 1. Class对象调用newInstance()方法
-
+   
    ```java
    Class.forName("...").newInstance()
    ```
 
 2. Constructor构造器调用newInstance()方法
-
+   
    ```java
    Constructor constructor Class.forName("...").getConstrucor(para.class);
    constructor.setAccessible(true);
@@ -1326,14 +1340,14 @@ Declared可获取内部包含的所有变量、方法和构造器，但是无法
 1. 可以通过调用类中的getter、setter方法
 
 2. 直接通过Field类中的提供的set、get方法，由于类中属性大多数为private，需要使用setAccessible(true)方法将需要操作的方法设置为可以外部访问
-
-	```java
-	C = Class.forName(“org.***”);
-	Org = c.getInstance();
-	nameField = c.getDeclaredField(“name”);
-	nameFiled.setAccessible(true);
-	nameField.set(org, “nameValue”);
-	```
+   
+   ```java
+   C = Class.forName(“org.***”);
+   Org = c.getInstance();
+   nameField = c.getDeclaredField(“name”);
+   nameFiled.setAccessible(true);
+   nameField.set(org, “nameValue”);
+   ```
 
 ### 使用反射操作应用类
 
@@ -1341,9 +1355,9 @@ Declared可获取内部包含的所有变量、方法和构造器，但是无法
 
 - 装载：通过类加载器把.class二进制文件装入JVM的方法区，并在堆区创建描述该类的java.lang.Class对象
 - 链接：把二进制数据组装成可以运行的状态
-	- 校验：确认该文件是否适合当前的JVM版本
-	- 准备：为静态成员分配内存空间，设置默认值
-	- 解析：转换常量池的代码为直接引用的过程，直到所有的符号引用都可被运行程序使用
+  - 校验：确认该文件是否适合当前的JVM版本
+  - 准备：为静态成员分配内存空间，设置默认值
+  - 解析：转换常量池的代码为直接引用的过程，直到所有的符号引用都可被运行程序使用
 - 初始化
 - 对象实例化
 - 垃圾收集
@@ -1352,7 +1366,7 @@ Declared可获取内部包含的所有变量、方法和构造器，但是无法
 
 ### 动态代理
 
-​	需要java.lang.reflect.InvocationHandle接口和java.lang.reflect.Proxy类的支持。
+​    需要java.lang.reflect.InvocationHandle接口和java.lang.reflect.Proxy类的支持。
 
 ```java
 Public interface InvocationHandle{
@@ -1367,7 +1381,7 @@ Public static Object newProxyInstance(ClassLoader loader, Class<?>[] interfaces,
 InvocationHandle h) throws IllegalArgumentException
 ```
 
-​	ClassLoader
+​    ClassLoader
 
 - BootStrap ClassLoader：C++编写
 - Extension ClassLoader：用来进行扩张类的加载，对应jre\lib\ext目录中的类
@@ -1405,40 +1419,49 @@ class MyInvocationHandler implements InvocationHandler{
 ## 文件
 
 - File.separator(分隔符，根据操作系统决定是使用/或者\)
+
 - File.pathSeparator(表示路径的分隔符，如  ；)
+
 - New file(path);
+
 - OutputStream
-	- FileOutputStream
-	- ByteArrayOutputStream
-	- PipedOutputStream
-	- FilterOutputStream
-		- PrintStream
-	- ObjectOutputStream
-		- DateOutputStream
-		- DeflaterOutputStream
-			- ZipOutputStream
+  
+  - FileOutputStream
+  - ByteArrayOutputStream
+  - PipedOutputStream
+  - FilterOutputStream
+    - PrintStream
+  - ObjectOutputStream
+    - DateOutputStream
+    - DeflaterOutputStream
+      - ZipOutputStream
 
 - InputStream
-	- FileInputStream
-	- ByteArrayOutputStream
-	- PipedInputStream
-	- FilterInputStream
-		- DataInputStream
-	- SequenceInputStream
-		- InflaterInputStream
-			- ZipInputStream
-	- ObjectInputStream
-	- PushbackInputStrea
+  
+  - FileInputStream
+  - ByteArrayOutputStream
+  - PipedInputStream
+  - FilterInputStream
+    - DataInputStream
+  - SequenceInputStream
+    - InflaterInputStream
+      - ZipInputStream
+  - ObjectInputStream
+  - PushbackInputStrea
+
 - Writer
-	- OutputStreamWriter
-		- FileWriter
-	- PrintWriter
+  
+  - OutputStreamWriter
+    - FileWriter
+  - PrintWriter
+
 - Reader
-	- InputStreamReader
-		- FileReader
-	- BufferedReader
-	- FilterReader
-		- PushbackReader
+  
+  - InputStreamReader
+    - FileReader
+  - BufferedReader
+  - FilterReader
+    - PushbackReader
 
 ### 取得文件信息
 
@@ -1530,9 +1553,10 @@ DateOutputStream
 Reader-InputStreamReader
 
 - close()
-
 + mark()
+
 + read()
+
 + reset()
 
 FIleReader，Window换行符为\r\n，linux为\n
@@ -1560,14 +1584,13 @@ PipedOutputStream类中Public void connect(PipedInputStream snk) throws IOExcetp
 1. Scanner(File source)
 2. Scanner(String source)
 3. Scanner(InputStream source)
-
 - findInLine()
 - nextInt()
 - nextShort()
 - nextFloat()
 
 ```java
-	String input = new String("2 018-hleoolo-98912-gsgsgs-1234-agag8788");
+    String input = new String("2 018-hleoolo-98912-gsgsgs-1234-agag8788");
     Scanner scanner= new Scanner(input);
     scanner.findInLine("\\d");
     MatchResult result = scanner.match();
@@ -1621,7 +1644,6 @@ Byte b[] = “中国，你好”.getBytes(“IOS8859-1”);
 - 需要实现Serializable接口（java.io.Serializable-标识接口）
 - 实现序列化接口的对象可以经过而二进制数据流进行传输，需要依靠对象输出流和输入流。（ObjectOutputStream、ObjectInputStream）。只有属性被序列化。
 - 序列化和反序列化若JDK版本不一致，则会造成异常。当实现java.io.Serializable没有显式定义serialVersionUID，则会自动生成该long变量。
-
 1. 序列化：ObjectOutputStream，writeObject
 2. 反序列化：ObjectInputStream，readObject
 
@@ -1672,7 +1694,6 @@ java.net.InetAddress
 
 1. Socket(String host,int port);
 2. Socket(InetAddress address,int port);
-
 - getInetAddress()-return InetAddress
 - getPort()
 - getLocalAddress()
@@ -1680,7 +1701,7 @@ java.net.InetAddress
 - getInputStream()
 - getOutputStream()
 
-###  UDP
+### UDP
 
 ### URL
 
@@ -1690,13 +1711,13 @@ Uniform Resource Locator，统一资源定位符
 - Public URLConnection openConnection() throws IOException
 - Public final InputStream openStream() throws IOException
 
-###  Encode\Decode
+### Encode\Decode
 
 Public static String encode(String s, String enc) throws UnsupportedEcodingException
 
-##  设计模式
+## 设计模式
 
-###  工厂模式
+### 工厂模式
 
 ### 代理模式
 
@@ -1704,7 +1725,7 @@ Public static String encode(String s, String enc) throws UnsupportedEcodingExcep
 
 ### 观察者设计模式
 
-​	在java.util包中提供了Observable类和Observer接口，可完成观察者模式。被观察者需要继承Observable类。
+​    在java.util包中提供了Observable类和Observer接口，可完成观察者模式。被观察者需要继承Observable类。
 
 - public void addObserver(Observer o)
 - public void deleteObserver(Observer o)
@@ -1729,14 +1750,14 @@ public interface Observer{
 
 ### Logger级别
 
-| SEVERE  | 严重                 |
-| ------- | -------------------- |
-| WARNING | 警告                 |
-| INFO    | 信息                 |
-| CONFIG  | 配置                 |
-| FINE    | 良好                 |
-| FINER   | 较好                 |
-| FINEST  | 最好                 |
+| SEVERE  | 严重         |
+| ------- | ---------- |
+| WARNING | 警告         |
+| INFO    | 信息         |
+| CONFIG  | 配置         |
+| FINE    | 良好         |
+| FINER   | 较好         |
+| FINEST  | 最好         |
 | ALL     | 开启所有级别日志记录 |
 | OFF     | 关闭所有级别日志记录 |
 
@@ -1749,7 +1770,7 @@ java.util.logging.ConsoleHandler.formatter = java.util.logging.SimpleFormatter
 
 ### Handle
 
-​	Handle对象从Logger中获取日志信息，并将这些信息导出。
+​    Handle对象从Logger中获取日志信息，并将这些信息导出。
 
 - java.util.logging.Handler 
 - java.util.logging.MemoryHandler 
