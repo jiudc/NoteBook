@@ -4,7 +4,6 @@
 
 1. .java->编译器->字节码文件
 2. 字节码文件->JVM->机器码
-
 - 编译为class：javac
 - 装载class：ClassLoader
 - 执行class

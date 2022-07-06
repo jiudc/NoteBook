@@ -1,6 +1,6 @@
 # Spring
 
-​	Spring是一个开源的轻量级Java SE（Java 标准版本）/Java EE（Java 企业版本）开发应用框架，其目的是用于简化企业级应用程序开发。特点如下：
+​    Spring是一个开源的轻量级Java SE（Java 标准版本）/Java EE（Java 企业版本）开发应用框架，其目的是用于简化企业级应用程序开发。特点如下：
 
 1. Spring能帮我们根据配置文件创建及组装对象之间的依赖关系。
 2. Spring 面向切面编程能帮助我们无耦合的实现日志记录，性能统计，安全控制。
@@ -11,9 +11,9 @@
 
 ## IOC-Inversion Of Control
 
-​	传统Java SE程序设计，我们直接在对象内部通过new进行创建对象，是程序主动去创建依赖对象；而IoC是有专门一个容器来创建这些对象，即由Ioc容器来控制对象的创建；谁控制谁？当然是IoC 容器控制了对象；控制什么？那就是主要控制了外部资源获取（不只是对象包括比如文件等）。
+​    传统Java SE程序设计，我们直接在对象内部通过new进行创建对象，是程序主动去创建依赖对象；而IoC是有专门一个容器来创建这些对象，即由Ioc容器来控制对象的创建；谁控制谁？当然是IoC 容器控制了对象；控制什么？那就是主要控制了外部资源获取（不只是对象包括比如文件等）。
 
-​	IoC容器就是具有依赖注入功能的容器，IoC容器负责实例化、定位、配置应用程序中的对象及建立这些对象间的依赖。应用程序无需直接在代码中new相关的对象，应用程序由IoC容器进行组装。在Spring中BeanFactory是IoC容器的实际代表者。
+​    IoC容器就是具有依赖注入功能的容器，IoC容器负责实例化、定位、配置应用程序中的对象及建立这些对象间的依赖。应用程序无需直接在代码中new相关的对象，应用程序由IoC容器进行组装。在Spring中BeanFactory是IoC容器的实际代表者。
 
 ## DI-Dependency Injection
 
@@ -24,9 +24,9 @@
 
 ## Bean
 
-​	由IoC容器管理的那些组成你应用程序的对象我们就叫它Bean， Bean就是由Spring容器初始化、装配及管理的对象，除此之外，bean就与应用程序中的其他对象没有什么区别了。
+​    由IoC容器管理的那些组成你应用程序的对象我们就叫它Bean， Bean就是由Spring容器初始化、装配及管理的对象，除此之外，bean就与应用程序中的其他对象没有什么区别了。
 
-​	配置文件的根元素是beans，每个组件使用bean元素来定义。Bean的两个元素是必须的：id-组件的默认名称，class-类的全名，name-是class属性的一个别名
+​    配置文件的根元素是beans，每个组件使用bean元素来定义。Bean的两个元素是必须的：id-组件的默认名称，class-类的全名，name-是class属性的一个别名
 
 ## 注入
 
@@ -37,17 +37,20 @@ list、map、property、util:list、p:、c:
 ### 自动装配
 
 1. byType：xml中autowire=“byType”
+
 2. byNames：xml中autowire=“byName”
 
-1. SET方法注入：Property
-2. 构造方法注入：Constructor-org
-3. 接口注入
+3. SET方法注入：Property
+
+4. 构造方法注入：Constructor-org
+
+5. 接口注入
 
 ![CDATA[]]-字面包含特殊字符可以使用
 
 ## Spring 核心思想
 
-​	降低Java开发的复杂性
+​    降低Java开发的复杂性
 
 1. 基于POJO(Plain Old Java Object)的轻量级和最小侵入性编程；
 2. 通过依赖注入和面向接口实现松耦合；
@@ -60,7 +63,7 @@ list、map、property、util:list、p:、c:
 2. AnnotaConfigWebApplicationContex：从一个或多个基于Java配置类中加载Spring Web应用上下文
 3. ClassPathXmlApplictionContext：从类路径下的一个或多个XML配置文件中加载上下文定义，把应用上下文的定义文件作为类资源
 4. FileSystemXmlapplicationcntext：从文件系统下的一个或多个XML配置文件中加载上下文定义
-5.  xmlWebApllicationContext：从Web应用下的一个或多个XML配置文件中加载文件定义
+5. xmlWebApllicationContext：从Web应用下的一个或多个XML配置文件中加载文件定义
 
 ### 生命周期
 
@@ -72,7 +75,7 @@ list、map、property、util:list、p:、c:
 
 ## 装配Bean
 
-​	Spring提供三种装配机制。
+​    Spring提供三种装配机制。
 
 1. 在XML中进行显示装配；
 2. 在JAVA中进行显示装配；
@@ -82,7 +85,6 @@ list、map、property、util:list、p:、c:
 
 1. 组件扫描
 2. 自动装配
-
 - @Component();    //类名的第一个字母变成小写
 - @Component(“bean_name”);
 - @Named();
@@ -103,29 +105,29 @@ list、map、property、util:list、p:、c:
 ### Java显式装配
 
 + @Bean：
-
+  
   + 告诉Spring这个方法将会返回一个对象，该对象要注册为Spring应用上下文的bean
-
+  
   + 默认，bean的ID与带有@Bean注解的方法名一样
-
+  
   + @Bean(name="beanName")：为bean指定名称
-
+  
   + ```java
     @Bean
     public CompactDisc sgtPeppers(){
             return new SgtPeppers();
     }
     ```
-
+  
   + 可以通过构造器或者Setter方法注入bean对象
-
+  
   + ```java
     @Bean
     public CDPlayer cdPlayer(CompactDisc cd){
             return new CDPlayer(cd);
     }
     ```
-
+  
   + 使用这种方式引入bean不要求注入的对象和本对象在同一个配置类中，被注入的对象可以通过组件扫描或者XML配置
 
 ## XML装配
@@ -133,7 +135,7 @@ list、map、property、util:list、p:、c:
 ### 构造器注入
 
 - <constructor-arg>
-
+  
   - ```xml
     <bean id="cdplayer1" class="com.ldc.chapter02.CDPlayer">
         <constructor-arg ref="castle"></constructor-arg>
@@ -141,17 +143,17 @@ list、map、property、util:list、p:、c:
     ```
 
 - c命名空间
-
+  
   - ```xml
     xmlns:c="http://www.springframework.org/schema/c"
     <bean id="cdplayer2" class="com.ldc.chapter02.CDPlayer"
           c:cd-ref="castle"/>
     ```
-
+  
   - c-命名空间前缀，构造器参数名，注入bean引用
-
+  
   - c:_0-ref：参数的索引
-
+  
   - c:_-ref：若只有一个参数
 
 ### 字面量注入
@@ -193,7 +195,7 @@ list、map、property、util:list、p:、c:
 
 ### util-命名空间
 
-​	用于装配集合等
+​    用于装配集合等
 
 - util:constant:引用某个类型的public static域，并将其暴露为bean
 - util:list
@@ -273,7 +275,7 @@ public class DataSourceConfig {
 
 #### 如何激活
 
-​	spring.profiles.active和spring.profiles.default
+​    spring.profiles.active和spring.profiles.default
 
 - 作为DispatcherServlet的初始化参数
 - 作为Web应用的上下文参数
@@ -297,16 +299,20 @@ public class ObjectExistCondition implements Condition {
 }
 ```
 
-​	ConditionContext可做到如下几点：
+​    ConditionContext可做到如下几点：
 
 ![image-20200529182818748](https://raw.githubusercontent.com/jiudc/pictures/master/image-20200529182818748.png)
 
 - getRegistry()检查bean定义
-- getBeanFactory()检查bean是否存在，探测bean的属性
-- getEnvironment()检查环境变量是否存在以及值
-- getResouceLoader返回ResouceLoader所加载的资源
-- getClassLoader返回ClassLoader加载并检查类是否存在
 
+- getBeanFactory()检查bean是否存在，探测bean的属性
+
+- getEnvironment()检查环境变量是否存在以及值
+
+- getResouceLoader返回ResouceLoader所加载的资源
+
+- getClassLoader返回ClassLoader加载并检查类是否存在
+  
   AnnotatedTypeMetadata用于检查@Bean注解的方法上还有什么其他的注解
 
 ### 处理装配歧义性
@@ -329,21 +335,23 @@ public class ObjectExistCondition implements Condition {
   ```
 
 - 自定义限定符
-
+  
   - ```java
     @Component/@Bean
     @Qualifier("cold")
+    ```
     
     ```
-  ```
     
+    ```
+  
   - ```java
     @Autowired
     @Qualifer("cold")
-  ```
+    ```
 
 - 自定义限定符注解：可以添加多个限定符
-
+  
   - ```java
     @Target({ElementType.CONSTRUCTOR, ElementType.FIELD,
             ElementType.METHOD, ElementType.TYPE})
@@ -352,7 +360,7 @@ public class ObjectExistCondition implements Condition {
     public @interface Cold {
     }
     ```
-
+  
   - ```java
     @Component
     @Cold
@@ -362,14 +370,17 @@ public class ObjectExistCondition implements Condition {
 ### Bean的作用域
 
 - 单例（Singleton）：整个应用只创建bean的一个实例，默认为单例的作用域
-- 原型（Prototype）：每次注入或通过Spring上下文获取均会创建新的
-- 会话（Session）：会话级别
-- 请求（Request）：请求级别
 
+- 原型（Prototype）：每次注入或通过Spring上下文获取均会创建新的
+
+- 会话（Session）：会话级别
+
+- 请求（Request）：请求级别
+  
   设置作用域
 
 - 组件扫描发现
-
+  
   ```java
   @Component
   @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
@@ -378,7 +389,7 @@ public class ObjectExistCondition implements Condition {
   ```
 
 - Java配置
-
+  
   ```java
   @Bean
   @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
@@ -388,7 +399,7 @@ public class ObjectExistCondition implements Condition {
   ```
 
 - xml配置
-
+  
   ```xml
   <bean id="notepad" class="com.ldc.chapter03.NotePad"
                 scope="prototype"/>
@@ -442,7 +453,7 @@ public class EnvConfig {
 }
 ```
 
-​	通过PropertySource可以将文件里面的类容加载到env中，通过getProperty()
+​    通过PropertySource可以将文件里面的类容加载到env中，通过getProperty()
 
 - String getProperty(String key,【String defaultValue】)
 - T getProperty(String key, Class<T> type, 【T defaultValue】)
@@ -457,7 +468,7 @@ public class EnvConfig {
 #### 占位符
 
 - 组件扫描或者自动装配
-
+  
   ```java
   public BlankDisc(@Value("${disc.title}") String title, @Value("${disc.artist}")String artist, List<String> tracks) {
       this.title = title;
@@ -467,19 +478,19 @@ public class EnvConfig {
   ```
 
 - xml
-
+  
   ```xml
-      &lt;bean id=&quot;play&quot; class=&quot;com.ldc.chapter02.BlankDisc&quot;
-            c:artist=&quot;Jolion&quot;
-            c:_0=&quot;${cd.title}&quot;
-            c:_2-ref=&quot;trackList&quot;/&gt;  
+      <bean id="play" class="com.ldc.chapter02.BlankDisc"
+            c:artist="Jolion"
+            c:_0="${cd.title}"
+            c:_2-ref="trackList"/>  
   ```
-
+  
   要使用占用符，需要配置PropertyPlaceholderConfigure或PropertySourcePlaceholerConfigure。推荐后者。使用XML则<context:property-placeholder>
 
 ### 使用Spring表达式语言进行装配
 
-​	Spring Expression Language，使用#{}
+​    Spring Expression Language，使用#{}
 
 - 表示字面值：
   - #{3.14}
@@ -525,15 +536,15 @@ public class EnvConfig {
 
 #### 连接点
 
-​	应用执行过程中能够插入切面的一个点
+​    应用执行过程中能够插入切面的一个点
 
 #### 切点
 
-​	匹配通知所要织入的一个或多个连接点
+​    匹配通知所要织入的一个或多个连接点
 
 #### 切面
 
-​	通知和切点的结合。通知和切点共同定义了切面的全部内容。
+​    通知和切点的结合。通知和切点共同定义了切面的全部内容。
 
 #### 引入
 
@@ -541,7 +552,7 @@ public class EnvConfig {
 
 #### 织入
 
-​	把切面应用到目标对象并创建新的代理对象的过程。
+​    把切面应用到目标对象并创建新的代理对象的过程。
 
 - 编译器：在目标类编译时被织入
 - 类加载期：在目标类加载到JVM被织入。需要特殊的类加载器（ClassLoader）
@@ -578,14 +589,14 @@ public class EnvConfig {
 - @annotation:限定匹配带有指定注解的连接点
 
 - @bean()
-
+  
   举例：execution(* connert.Performance.perform(...)) && within(concert.*)
-
+  
   execution(* connert.Performance.perform(...)) and !bean('woodstock')
 
 ### 使用注解创建切面
 
-​	AspectJ 5引入。
+​    AspectJ 5引入。
 
 #### 定义切面
 
@@ -623,7 +634,7 @@ public class Audience {
 #### 启动自动代理
 
 - java：@EnableAspectJAutoProxy
-
+  
   ```java
   @Configuration
   @EnableAspectJAutoProxy
@@ -642,7 +653,7 @@ public class Audience {
   ```
 
 - xml：<aop:aspectj-autoproxy/>
-
+  
   ```xml
   <?xml version="1.0" encoding="UTF-8"?>
   <beans xmlns="http://www.springframework.org/schema/beans"
@@ -658,7 +669,7 @@ public class Audience {
   ```
 
 - 环绕通知：ProceedingJoinPoint ，jp.proceed();
-
+  
   ```java
   @Aspect
   public class Audience {
@@ -685,7 +696,7 @@ public class Audience {
   execution(* connert.Performance.perform(int)) && args(num)
 
 - 引入新功能
-
+  
   ```java
   @Aspect
   public class ExtendAspectConfig {
@@ -697,16 +708,16 @@ public class Audience {
 
 #### 在XML中申明切面
 
-| AOP配置元素                           | 用途                                     |
-| ------------------------------------- | ---------------------------------------- |
-| \<aop:advisor\>                       | 通知器                                   |
-| \<aop:after> before                   | 后置/前置                                |
-| \<aop:after-returning> after-throwing | 返回/异常                                |
-| \<aop:around>                         | 环绕                                     |
-| \<aop:aspect> aspectj-autoproxy       | 定义切面/启动@AspectJ注解驱动的切面      |
-| \<aop:config>                         | 顶层的AOP配置元素                        |
-| \<aop:declare-parents>                | 以透明的方式为被通知的对象引入额外的接口 |
-| \<aop:pointcut>                       | 切点                                     |
+| AOP配置元素                               | 用途                     |
+| ------------------------------------- | ---------------------- |
+| \<aop:advisor\>                       | 通知器                    |
+| \<aop:after> before                   | 后置/前置                  |
+| \<aop:after-returning> after-throwing | 返回/异常                  |
+| \<aop:around>                         | 环绕                     |
+| \<aop:aspect> aspectj-autoproxy       | 定义切面/启动@AspectJ注解驱动的切面 |
+| \<aop:config>                         | 顶层的AOP配置元素             |
+| \<aop:declare-parents>                | 以透明的方式为被通知的对象引入额外的接口   |
+| \<aop:pointcut>                       | 切点                     |
 
 切面引入新的功能：
 
