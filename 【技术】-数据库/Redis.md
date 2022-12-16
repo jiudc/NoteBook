@@ -2,7 +2,7 @@
 
 ## NoSQL
 
-​	NoSQL（Not Only SQL）
+​    NoSQL（Not Only SQL）
 
 - 不遵循SQL标准
 - 不支持ACID

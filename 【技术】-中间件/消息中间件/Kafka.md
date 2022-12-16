@@ -23,6 +23,3 @@ Kafka是一款开源的消息引擎系统
 是指一个Kafka服务器。如果多个broker形成集群会依靠Zookeeper集群进行服务的协调管理。
 
 ### Topic和Partition
-
-
-
